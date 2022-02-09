@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from './components'
 import { About, Analytics, Error, Pomodoro, Settings, Tags, Tasks, TimeTracking } from './pages'
 
@@ -7,7 +7,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<AppLayout />}>
-          <Route index element={<TimeTracking />} />
+          <Route index element={<Navigate to='/time_tracking' />} />
           <Route path='time_tracking' element={<TimeTracking />} />
           <Route path='tasks' element={<Tasks />} />
           <Route path='tags' element={<Tags />} />

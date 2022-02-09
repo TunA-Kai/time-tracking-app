@@ -17,13 +17,13 @@ function SideBar({}: SideBarProps) {
           key={id}
           to={to}
           className={({ isActive }) =>
-            `flex gap-4 border-l-4 p-2 pl-1 hover:bg-lime-100 ${
-              isActive ? 'border-rose-500 bg-lime-100' : 'border-transparent'
+            `flex gap-4 border-l-4 p-2 pl-1 hover:bg-slate-700 ${
+              isActive ? 'border-rose-500 bg-slate-700' : 'border-transparent'
             }`
           }
         >
           <Icon className='h-6 w-6' />
-          {open && <span className='hidden w-40 grow select-none lg:block'>{title}</span>}
+          {open && <span className='hidden w-52 grow select-none lg:block'>{title}</span>}
         </NavLink>
       ))}
     </nav>

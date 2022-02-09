@@ -5,11 +5,11 @@ interface AppLayoutProps {}
 
 function AppLayout({}: AppLayoutProps) {
   return (
-    <main className='flex h-screen w-screen'>
-      <div className='bg-lime-200 px-2 py-4'>
+    <main className='flex h-screen w-screen text-slate-50'>
+      <div className='bg-slate-800 px-2 py-4'>
         <SideBar />
       </div>
-      <div className='grow bg-sky-200 p-4'>
+      <div className='grow bg-slate-900 p-4'>
         <Outlet />
       </div>
     </main>
