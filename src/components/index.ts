@@ -1,5 +1,6 @@
+import ActionBar from './ActionBar'
 import AppLayout from './AppLayout'
 import PageTitle from './PageTitle'
 import SideBar from './sidebar/SideBar'
 
-export { AppLayout, SideBar, PageTitle }
+export { AppLayout, SideBar, PageTitle, ActionBar }

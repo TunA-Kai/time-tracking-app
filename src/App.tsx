@@ -1,6 +1,17 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from './components'
-import { About, Analytics, Error, Pomodoro, Settings, Tags, Tasks, TimeTracking } from './pages'
+import {
+  About,
+  Analytics,
+  Error,
+  Pomodoro,
+  Settings,
+  Tags,
+  Tasks,
+  TasksHome,
+  TasksNew,
+  TimeTracking,
+} from './pages'
 
 function App() {
   return (
@@ -9,7 +20,10 @@ function App() {
         <Route path='/' element={<AppLayout />}>
           <Route index element={<Navigate to='/time_tracking' />} />
           <Route path='time_tracking' element={<TimeTracking />} />
-          <Route path='tasks' element={<Tasks />} />
+          <Route path='tasks' element={<Tasks />}>
+            <Route index element={<TasksHome />} />
+            <Route path='new' element={<TasksNew />} />
+          </Route>
           <Route path='tags' element={<Tags />} />
           <Route path='analytics' element={<Analytics />} />
           <Route path='pomodoro' element={<Pomodoro />} />
