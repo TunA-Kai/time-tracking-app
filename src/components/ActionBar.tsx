@@ -39,16 +39,10 @@ function ActionBar({ type }: ActionBarProps) {
           ))}
         </Menu.Items>
       </Menu>
-      <input
-        type='search'
-        name=''
-        id=''
-        className='grow rounded-md border-b border-slate-200 bg-slate-700 p-2 text-slate-50 focus:border-sky-500 focus:bg-slate-800 focus:outline-none'
-        placeholder='Seach...'
-      />
+      <input type='search' name='' className='input grow p-2' placeholder='Seach...' />
       <Link to='new' className='flex items-center gap-1 rounded-md p-2 hover:bg-slate-700'>
         <BsPlusCircle className='' />
-        <span>Create new tasks</span>
+        <span>Create new {type}</span>
       </Link>
     </div>
   )
