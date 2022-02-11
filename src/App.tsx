@@ -23,6 +23,7 @@ function App() {
           <Route path='tasks' element={<Tasks />}>
             <Route index element={<TasksHome />} />
             <Route path='new' element={<TasksNew />} />
+            <Route path='edit/:taskId' element={<TasksNew edit />} />
           </Route>
           <Route path='tags' element={<Tags />} />
           <Route path='analytics' element={<Analytics />} />

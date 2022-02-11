@@ -1,21 +1,47 @@
 import { Listbox } from '@headlessui/react'
 import * as React from 'react'
-import { BsCheck2, BsChevronExpand } from 'react-icons/bs'
+import { BsArrowLeftCircle, BsCheck2, BsChevronExpand, BsSave2 } from 'react-icons/bs'
+import { FaTrash } from 'react-icons/fa'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useTaskContext } from '../../contexts/taskContext/taskContext'
 import { colorOption } from '../../utils/constants/colorOptions'
 
-interface TasksNewProps {}
+interface TasksNewProps {
+  edit?: true
+}
 
-function TasksNew({}: TasksNewProps) {
-  const [color, setColor] = React.useState<string>('bg-sky-400')
+function TasksNew({ edit }: TasksNewProps) {
+  const navigate = useNavigate()
+  const { taskId } = useParams()
+  const { addTask, getTask, deleteTask, updateTask } = useTaskContext()
+  const {
+    color: currentColor = 'bg-sky-400',
+    name: currentName = '',
+    details: currentDetail = '',
+  } = getTask(Number(taskId)) ?? {}
+  const [color, setColor] = React.useState<string>(currentColor)
+  const [taskName, setTaskName] = React.useState<string>(currentName)
+  const [taskDetail, setTaskDetail] = React.useState<string>(currentDetail)
+
   return (
-    <div className='max-w-md space-y-4'>
+    <form className='max-w-md space-y-4'>
       <label className='block'>
         <span className='block'>Task name</span>
-        <input type='text' className='input w-full py-1 px-2' />
+        <input
+          type='text'
+          className='input w-full py-1 px-2'
+          value={taskName}
+          onChange={e => setTaskName(e.target.value)}
+        />
       </label>
       <label className='block'>
         <span className='block'>Details</span>
-        <textarea rows={7} className='input w-full resize-none py-1 px-2'></textarea>
+        <textarea
+          rows={7}
+          className='input w-full resize-none py-1 px-2'
+          value={taskDetail}
+          onChange={e => setTaskDetail(e.target.value)}
+        ></textarea>
       </label>
       <Listbox value={color} onChange={setColor} as='div' className='relative'>
         <Listbox.Button className='flex w-full items-center justify-between rounded-md bg-slate-700 p-2'>
@@ -39,7 +65,59 @@ function TasksNew({}: TasksNewProps) {
           ))}
         </Listbox.Options>
       </Listbox>
-    </div>
+
+      <div className='flex gap-2'>
+        <button
+          className='button flex items-center gap-1 border-2 border-slate-700'
+          onClick={() => {
+            navigate('/tasks')
+          }}
+        >
+          <BsArrowLeftCircle />
+          Back
+        </button>
+
+        <button
+          className='button flex items-center gap-1 border-2 border-slate-700'
+          onClick={() => {
+            if (edit) {
+              updateTask({
+                id: Number(taskId),
+                date: new Date(),
+                color,
+                name: taskName,
+                details: taskDetail,
+              })
+            } else {
+              addTask({
+                id: Math.random(),
+                date: new Date(),
+                color,
+                name: taskName,
+                details: taskDetail,
+              })
+            }
+            navigate('/tasks')
+          }}
+        >
+          <BsSave2 />
+          Save
+        </button>
+
+        {edit && (
+          <button
+            onClick={() => {
+              deleteTask(Number(taskId))
+              navigate('/tasks')
+            }}
+            className='button ml-auto flex items-center gap-1 border-2 border-slate-700'
+          >
+            <FaTrash />
+            Delete
+          </button>
+        )}
+      </div>
+    </form>
   )
 }
 

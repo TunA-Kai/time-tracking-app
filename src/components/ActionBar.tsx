@@ -14,7 +14,7 @@ function ActionBar({ type }: ActionBarProps) {
   return (
     <div className='flex gap-2'>
       <Menu as='div' className='relative'>
-        <Menu.Button className='rounded-md p-2 hover:bg-slate-700'>
+        <Menu.Button className='button'>
           <BsArrowDownUp className='mr-1 inline-block' />
           <span>Sort</span>
         </Menu.Button>
@@ -40,8 +40,9 @@ function ActionBar({ type }: ActionBarProps) {
         </Menu.Items>
       </Menu>
       <input type='search' name='' className='input grow p-2' placeholder='Seach...' />
-      <Link to='new' className='flex items-center gap-1 rounded-md p-2 hover:bg-slate-700'>
-        <BsPlusCircle className='' />
+
+      <Link to='new' className='button flex items-center gap-1'>
+        <BsPlusCircle />
         <span>Create new {type}</span>
       </Link>
     </div>
