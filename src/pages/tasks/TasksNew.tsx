@@ -2,7 +2,7 @@ import { Listbox } from '@headlessui/react'
 import * as React from 'react'
 import { BsArrowLeftCircle, BsCheck2, BsChevronExpand, BsSave2 } from 'react-icons/bs'
 import { FaTrash } from 'react-icons/fa'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useTaskContext } from '../../contexts/taskContext/taskContext'
 import { colorOption } from '../../utils/constants/colorOptions'
 
@@ -11,7 +11,6 @@ interface TasksNewProps {
 }
 
 function TasksNew({ edit }: TasksNewProps) {
-  const navigate = useNavigate()
   const { taskId } = useParams()
   const { addTask, getTask, deleteTask, updateTask } = useTaskContext()
   const {
@@ -22,6 +21,21 @@ function TasksNew({ edit }: TasksNewProps) {
   const [color, setColor] = React.useState<string>(currentColor)
   const [taskName, setTaskName] = React.useState<string>(currentName)
   const [taskDetail, setTaskDetail] = React.useState<string>(currentDetail)
+
+  function handleSave() {
+    const newTask = {
+      id: edit ? Number(taskId) : Math.random(),
+      date: new Date(),
+      color,
+      name: taskName,
+      details: taskDetail,
+    }
+    edit ? updateTask(newTask) : addTask(newTask)
+  }
+
+  function handleDelete() {
+    deleteTask(Number(taskId))
+  }
 
   return (
     <form className='max-w-md space-y-4'>
@@ -67,54 +81,29 @@ function TasksNew({ edit }: TasksNewProps) {
       </Listbox>
 
       <div className='flex gap-2'>
-        <button
-          className='button flex items-center gap-1 border-2 border-slate-700'
-          onClick={() => {
-            navigate('/tasks')
-          }}
-        >
+        <Link to='..' className='button flex items-center gap-1 border-2 border-slate-700'>
           <BsArrowLeftCircle />
           Back
-        </button>
+        </Link>
 
-        <button
+        <Link
+          to='..'
           className='button flex items-center gap-1 border-2 border-slate-700'
-          onClick={() => {
-            if (edit) {
-              updateTask({
-                id: Number(taskId),
-                date: new Date(),
-                color,
-                name: taskName,
-                details: taskDetail,
-              })
-            } else {
-              addTask({
-                id: Math.random(),
-                date: new Date(),
-                color,
-                name: taskName,
-                details: taskDetail,
-              })
-            }
-            navigate('/tasks')
-          }}
+          onClick={handleSave}
         >
           <BsSave2 />
           Save
-        </button>
+        </Link>
 
         {edit && (
-          <button
-            onClick={() => {
-              deleteTask(Number(taskId))
-              navigate('/tasks')
-            }}
+          <Link
+            to='..'
+            onClick={handleDelete}
             className='button ml-auto flex items-center gap-1 border-2 border-slate-700'
           >
             <FaTrash />
             Delete
-          </button>
+          </Link>
         )}
       </div>
     </form>
