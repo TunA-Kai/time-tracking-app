@@ -1,17 +1,10 @@
 import * as React from 'react'
-import { mockTasks } from '../../mocks/mockTasks'
-
-interface TTask {
-  id: number
-  date: Date
-  name: string
-  details: string
-  color: string
-}
+import { mockTasks } from '../../utils/mocks/mockTasks'
+import { SetValue, TTask } from '../../types'
 
 interface TaskContextType {
   tasks: TTask[]
-  setTasks: React.Dispatch<React.SetStateAction<TTask[]>>
+  setTasks: SetValue<TTask[]>
 }
 
 const TaskContext = React.createContext<TaskContextType | undefined>(undefined)

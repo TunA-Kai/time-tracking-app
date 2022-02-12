@@ -1,4 +1,6 @@
-const mockTasks = [
+import { TTask } from '../../types'
+
+const mockTasks: TTask[] = [
   {
     id: 1,
     date: new Date(),

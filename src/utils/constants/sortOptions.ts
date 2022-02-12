@@ -1,6 +1,6 @@
-type TSortOption = 'A to Z' | 'Z to A' | 'Oldest first' | 'Newest first' | 'Color'
+import { TSortOption } from '../../types'
 
-const sortOptions = [
+const sortOptions: { id: number; type: TSortOption }[] = [
   { id: 1, type: 'A to Z' },
   { id: 2, type: 'Z to A' },
   { id: 3, type: 'Oldest first' },
@@ -9,4 +9,3 @@ const sortOptions = [
 ]
 
 export { sortOptions }
-export type { TSortOption }

@@ -2,15 +2,16 @@ import { Menu } from '@headlessui/react'
 import * as React from 'react'
 import { BsArrowDownUp, BsCheck2, BsPlusCircle } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
-import { sortOptions, TSortOption } from '../utils/constants/sortOptions'
+import { SetValue, TSortOption } from '../types'
+import { sortOptions } from '../utils/constants/sortOptions'
 
 interface ActionBarProps {
   type: 'tasks' | 'tags'
+  sortType: TSortOption
+  setSortType: SetValue<TSortOption>
 }
 
-function ActionBar({ type }: ActionBarProps) {
-  const [sortType, setSortType] = React.useState<TSortOption>('A to Z')
-
+function ActionBar({ type, sortType, setSortType }: ActionBarProps) {
   return (
     <div className='flex gap-2'>
       <Menu as='div' className='relative'>
