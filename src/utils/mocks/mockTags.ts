@@ -1,30 +1,30 @@
-import { TTask } from '../../types'
+import { TTag } from '../../types'
 
-const mockTasks: TTask[] = [
+const mockTags: TTag[] = [
   {
     id: 1,
     date: new Date(),
-    name: 'Doing homework',
+    name: 'Homework',
     details: 'Lots of homework baby',
     color: 'bg-sky-400',
-    tags: [],
+    tasks: [],
   },
   {
     id: 2,
     date: new Date(),
-    name: 'Learn React',
+    name: 'Epicreact',
     details: 'Study from epicreact',
     color: 'bg-red-400',
-    tags: [],
+    tasks: [],
   },
   {
     id: 3,
     date: new Date(),
-    name: 'Build time tracking app',
-    details: 'What features are you in?',
+    name: 'React project',
+    details: 'Build time tracking app',
     color: 'bg-lime-400',
-    tags: [],
+    tasks: [],
   },
 ]
 
-export { mockTasks }
+export { mockTags }

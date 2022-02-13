@@ -10,6 +10,6 @@
   }
 
   .button {
-    @apply rounded-md p-2 hover:bg-slate-700;
+    @apply flex items-center gap-1 rounded-md p-2 hover:bg-slate-700;
   }
 }

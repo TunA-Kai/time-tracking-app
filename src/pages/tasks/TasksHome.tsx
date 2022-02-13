@@ -18,7 +18,7 @@ function TasksHome({}: TasksHomeProps) {
       <ul className='mt-4'>
         {sortTasks.map(t => (
           <li key={t.id}>
-            <Link to={`edit/${t.id}`} className='button flex w-full items-center gap-2'>
+            <Link to={`edit/${t.id}`} className='button w-full gap-2'>
               <span className={`${t.color} h-4 w-4 rounded-full`}></span>
               {t.name}
             </Link>

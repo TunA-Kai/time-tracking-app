@@ -16,7 +16,7 @@ function ActionBar({ type, sortType, setSortType }: ActionBarProps) {
     <div className='flex gap-2'>
       <Menu as='div' className='relative'>
         <Menu.Button className='button'>
-          <BsArrowDownUp className='mr-1 inline-block' />
+          <BsArrowDownUp />
           <span>Sort</span>
         </Menu.Button>
         <Menu.Items
@@ -42,7 +42,7 @@ function ActionBar({ type, sortType, setSortType }: ActionBarProps) {
       </Menu>
       <input type='search' name='' className='input grow p-2' placeholder='Seach...' />
 
-      <Link to='new' className='button flex items-center gap-1'>
+      <Link to='new' className='button'>
         <BsPlusCircle />
         <span>Create new {type}</span>
       </Link>

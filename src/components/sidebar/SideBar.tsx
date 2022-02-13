@@ -9,8 +9,11 @@ function SideBar({}: SideBarProps) {
   const [open, setOpen] = useState<boolean>(true)
   return (
     <nav className='space-y-2'>
-      <button onClick={() => setOpen(o => !o)}>
-        <VscThreeBars className='ml-2 h-6 w-6 cursor-pointer active:scale-75' />
+      <button
+        onClick={() => setOpen(o => !o)}
+        className='pointer-events-none lg:pointer-events-auto'
+      >
+        <VscThreeBars className='ml-2 h-6 w-6 text-slate-600 active:scale-75 lg:text-inherit' />
       </button>
       {navLinks.map(({ id, Icon, title, to }) => (
         <NavLink
