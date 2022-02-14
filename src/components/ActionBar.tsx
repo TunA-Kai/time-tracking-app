@@ -2,11 +2,11 @@ import { Menu } from '@headlessui/react'
 import * as React from 'react'
 import { BsArrowDownUp, BsCheck2, BsPlusCircle } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
-import { SetValue, TSortOption } from '../types'
+import { SetValue, TComponentType, TSortOption } from '../types'
 import { sortOptions } from '../utils/constants/sortOptions'
 
 interface ActionBarProps {
-  type: 'tasks' | 'tags'
+  type: TComponentType
   sortType: TSortOption
   setSortType: SetValue<TSortOption>
 }
@@ -40,7 +40,7 @@ function ActionBar({ type, sortType, setSortType }: ActionBarProps) {
           ))}
         </Menu.Items>
       </Menu>
-      <input type='search' name='' className='input grow p-2' placeholder='Seach...' />
+      <input type='search' name='' className='input grow' placeholder='Seach...' />
 
       <Link to='new' className='button'>
         <BsPlusCircle />

@@ -1,18 +1,10 @@
-import { Listbox } from '@headlessui/react'
 import * as React from 'react'
-import {
-  BsArrowLeftCircle,
-  BsBackspace,
-  BsCheck2,
-  BsChevronExpand,
-  BsPlusCircle,
-  BsSave2,
-} from 'react-icons/bs'
+import { BsArrowLeftCircle, BsSave2 } from 'react-icons/bs'
 import { FaTrash } from 'react-icons/fa'
 import { Link, useParams } from 'react-router-dom'
+import { ColorPicker, ItemPicker } from '../../components'
 import { useTaskContext } from '../../contexts/taskContext/taskContext'
 import { TTag } from '../../types'
-import { colorOption } from '../../utils/constants/colorOptions'
 import { DEFAULT_TASK_COLOR, DEFAULT_TASK_NAME } from '../../utils/constants/defaultValue'
 import { mockTags } from '../../utils/mocks/mockTags'
 
@@ -53,7 +45,7 @@ function TasksNew({ edit }: TasksNewProps) {
   function handleAddTag(tag: TTag) {
     setTags([...tags, tag])
   }
-  function handleDeleteTag(e: React.MouseEvent<HTMLSpanElement>, id: number) {
+  function handleDeleteTag(e: React.MouseEvent, id: number) {
     e.stopPropagation()
     setTags(tags.filter(tag => tag.id !== id))
   }
@@ -64,7 +56,7 @@ function TasksNew({ edit }: TasksNewProps) {
         <span className='block'>Task name</span>
         <input
           type='text'
-          className='input w-full py-1 px-2'
+          className='input w-full'
           value={taskName}
           onChange={e => setTaskName(e.currentTarget.value)}
           onFocus={e => e.currentTarget.value === DEFAULT_TASK_NAME && e.currentTarget.select()}
@@ -75,73 +67,22 @@ function TasksNew({ edit }: TasksNewProps) {
         <span className='block'>Details</span>
         <textarea
           rows={7}
-          className='input w-full resize-none py-1 px-2'
+          className='input w-full resize-none'
           value={taskDetail}
           onChange={e => setTaskDetail(e.target.value)}
           placeholder='What exactly do you want to do?'
         ></textarea>
       </label>
-      <Listbox value={color} onChange={setColor} as='div' className='relative'>
-        <Listbox.Button className='flex w-full items-center justify-between rounded-md bg-slate-700 p-2'>
-          <span className={`${color} mr-2 h-6 w-6 rounded-full`}></span>
-          <span>Color</span>
-          <BsChevronExpand className='ml-auto' />
-        </Listbox.Button>
-        <Listbox.Options className='absolute bottom-12 right-0 grid grid-cols-5 gap-2 rounded-md border-2 border-sky-500 bg-slate-800 p-2 lg:-right-3 lg:bottom-0 lg:translate-x-full '>
-          {colorOption.map((c, index) => (
-            <Listbox.Option key={index} value={c} as={React.Fragment}>
-              {({ active, selected }) => (
-                <li
-                  className={`${
-                    active ? 'scale-110' : ''
-                  } ${c} grid h-8 w-8 place-items-center rounded-full`}
-                >
-                  {selected && <BsCheck2 className='stroke-1 text-2xl text-slate-900' />}
-                </li>
-              )}
-            </Listbox.Option>
-          ))}
-        </Listbox.Options>
-      </Listbox>
 
-      <Listbox value={{} as TTag} onChange={handleAddTag} as='div' className='relative'>
-        <Listbox.Button className='flex w-full items-center justify-between rounded-md bg-slate-700 p-2'>
-          <ul className='flex gap-1'>
-            {tags.length === 0 ? (
-              <li>Pick a tag</li>
-            ) : (
-              tags.map(t => (
-                <li
-                  key={t.id}
-                  className={`${t.color} flex items-center gap-1 rounded-sm px-1 text-slate-900`}
-                >
-                  {t.name}
-                  <span onClick={e => handleDeleteTag(e, t.id)}>
-                    <BsBackspace />
-                  </span>
-                </li>
-              ))
-            )}
-          </ul>
-          <BsChevronExpand className='ml-auto' />
-        </Listbox.Button>
-        <Listbox.Options className='absolute bottom-12 right-0 grid grid-cols-1 rounded-md border-2 border-sky-500 bg-slate-800 lg:-right-3 lg:bottom-0 lg:translate-x-full '>
-          {mockTags.map(t =>
-            tags.includes(t) ? undefined : (
-              <Listbox.Option key={t.id} value={t} className='button gap-1'>
-                <span className={`${t.color} h-4 w-4 rounded-full`}></span>
-                {t.name}
-              </Listbox.Option>
-            ),
-          )}
-          <Listbox.Option value={undefined}>
-            <Link to='/tags/new' className='button gap-1'>
-              <BsPlusCircle />
-              <span>Create new tag</span>
-            </Link>
-          </Listbox.Option>
-        </Listbox.Options>
-      </Listbox>
+      <ColorPicker color={color} setColor={setColor} />
+
+      <ItemPicker
+        type='tag'
+        allItemList={mockTags}
+        pickedItemList={tags}
+        onChange={handleAddTag}
+        onDelete={handleDeleteTag}
+      />
 
       <div className='flex gap-2'>
         <Link to='..' className='button border-2 border-slate-700'>
