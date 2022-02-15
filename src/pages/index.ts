@@ -4,6 +4,8 @@ import Error from './error/Error'
 import Pomodoro from './pomodoro/Pomodoro'
 import Settings from './settings/Settings'
 import Tags from './tags/Tags'
+import TagsHome from './tags/TagsHome'
+import TagsNew from './tags/TagsNew'
 import Tasks from './tasks/Tasks'
 import TasksHome from './tasks/TasksHome'
 import TasksNew from './tasks/TasksNew'
@@ -20,4 +22,6 @@ export {
   Error,
   TasksHome,
   TasksNew,
+  TagsHome,
+  TagsNew,
 }

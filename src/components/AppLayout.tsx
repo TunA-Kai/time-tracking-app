@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom'
 import { SideBar } from '.'
+import { TagProvider } from '../contexts/tagContext/tagContext'
 import { TaskProvider } from '../contexts/taskContext/taskContext'
 
 interface AppLayoutProps {}
@@ -11,9 +12,11 @@ function AppLayout({}: AppLayoutProps) {
         <SideBar />
       </aside>
       <TaskProvider>
-        <div className='grow bg-slate-900 p-4'>
-          <Outlet />
-        </div>
+        <TagProvider>
+          <div className='grow bg-slate-900 p-4'>
+            <Outlet />
+          </div>
+        </TagProvider>
       </TaskProvider>
     </main>
   )

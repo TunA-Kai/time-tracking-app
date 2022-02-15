@@ -1,6 +1,6 @@
-import { TSortOption, TTask } from '../../types'
+import { TItem, TSortOption } from '../../types'
 
-function sortList(list: TTask[], sortType: TSortOption) {
+function sortList<T extends TItem>(list: T[], sortType: TSortOption) {
   const listCopy = [...list]
   switch (sortType) {
     case 'A to Z':

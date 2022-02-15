@@ -7,6 +7,8 @@ import {
   Pomodoro,
   Settings,
   Tags,
+  TagsHome,
+  TagsNew,
   Tasks,
   TasksHome,
   TasksNew,
@@ -25,7 +27,11 @@ function App() {
             <Route path='new' element={<TasksNew />} />
             <Route path='edit/:taskId' element={<TasksNew edit />} />
           </Route>
-          <Route path='tags' element={<Tags />} />
+          <Route path='tags' element={<Tags />}>
+            <Route index element={<TagsHome />} />
+            <Route path='new' element={<TagsNew />} />
+            <Route path='edit/:tagId' element={<TagsNew edit />} />
+          </Route>
           <Route path='analytics' element={<Analytics />} />
           <Route path='pomodoro' element={<Pomodoro />} />
           <Route path='about' element={<About />} />

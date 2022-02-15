@@ -19,7 +19,7 @@ function ItemPicker<T extends TItem>({
   return (
     <Listbox value={{} as T} onChange={onChange} as='div' className='relative'>
       <Listbox.Button className='flex w-full items-center justify-between rounded-md bg-slate-700 p-2'>
-        <ul className='flex gap-1'>
+        <ul className='flex flex-wrap gap-1'>
           {pickedItemList.length === 0 ? (
             <li>Pick a {type}</li>
           ) : (
