@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { AiOutlineTag } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
 import { ActionBar } from '../../components'
@@ -11,13 +12,24 @@ interface TasksHomeProps {}
 function TasksHome({}: TasksHomeProps) {
   const { tasks } = useTaskContext()
   const [sortType, setSortType] = useLocalStorage<TSortOption>('task_sort_type', 'Newest first')
+  const [searchQuery, setSearchQuery] = React.useState<string>('')
   const sortTasks = sortList(tasks, sortType)
+  const searchedTasks =
+    searchQuery.trim() === ''
+      ? sortTasks
+      : sortTasks.filter(t => t.name.toLowerCase().includes(searchQuery.toLowerCase()))
 
   return (
     <div>
-      <ActionBar type='task' sortType={sortType} setSortType={setSortType} />
+      <ActionBar
+        type='task'
+        sortType={sortType}
+        setSortType={setSortType}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+      />
       <ul className='mt-4'>
-        {sortTasks.map(t => (
+        {searchedTasks.map(t => (
           <li key={t.id}>
             <Link to={`edit/${t.id}`} className='button w-full gap-2'>
               <span className={`${t.color} h-4 w-4 rounded-full`}></span>

@@ -8,10 +8,12 @@ import { sortOptions } from '../utils/constants/sortOptions'
 interface ActionBarProps {
   type: TComponentType
   sortType: TSortOption
+  searchQuery: string
   setSortType: SetValue<TSortOption>
+  setSearchQuery: SetValue<string>
 }
 
-function ActionBar({ type, sortType, setSortType }: ActionBarProps) {
+function ActionBar({ type, sortType, setSortType, searchQuery, setSearchQuery }: ActionBarProps) {
   return (
     <div className='flex gap-2'>
       <Menu as='div' className='relative'>
@@ -40,7 +42,13 @@ function ActionBar({ type, sortType, setSortType }: ActionBarProps) {
           ))}
         </Menu.Items>
       </Menu>
-      <input type='search' name='' className='input grow' placeholder='Seach...' />
+      <input
+        type='search'
+        value={searchQuery}
+        onChange={e => setSearchQuery(e.currentTarget.value)}
+        className='input grow'
+        placeholder='Seach...'
+      />
 
       <Link to='new' className='button'>
         <BsPlusCircle />

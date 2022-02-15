@@ -42,9 +42,10 @@ function TasksNew({ edit }: TasksNewProps) {
     deleteTask(taskId)
   }
 
-  function handleAddTag(tag: TTag) {
-    setTags([...tags, tag])
-  }
+  // useCallback here because it is in the dependency list in Listbox component
+  const handleAddTag = React.useCallback(function handleAddTag(tag: TTag) {
+    setTags(oldTags => [...oldTags, tag])
+  }, [])
   function handleDeleteTag(e: React.MouseEvent, id: number) {
     e.stopPropagation()
     setTags(tags.filter(tag => tag.id !== id))
