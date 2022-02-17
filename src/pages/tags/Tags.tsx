@@ -1,14 +1,13 @@
 import { Outlet } from 'react-router-dom'
-import { PageTitle } from '../../components'
+import { PageLayout } from '../../components'
 
 interface TagsProps {}
 
 function Tags({}: TagsProps) {
   return (
-    <div>
-      <PageTitle title='Tags' />
+    <PageLayout title='Tags'>
       <Outlet />
-    </div>
+    </PageLayout>
   )
 }
 

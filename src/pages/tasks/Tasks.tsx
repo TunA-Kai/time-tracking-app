@@ -1,14 +1,13 @@
 import { Outlet } from 'react-router-dom'
-import { PageTitle } from '../../components'
+import { PageLayout } from '../../components'
 
 interface TasksProps {}
 
 function Tasks({}: TasksProps) {
   return (
-    <div>
-      <PageTitle title='Tasks' />
+    <PageLayout title='Tasks'>
       <Outlet />
-    </div>
+    </PageLayout>
   )
 }
 

@@ -1,13 +1,16 @@
 // replace this component with .button class in CSS
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
+import { createElement, ElementType } from 'react'
 
-function Button({ children, className: additionStyles = '', ...props }: ButtonProps) {
-  return (
-    <button className={`rounded-md p-2 hover:bg-slate-700 ${additionStyles}`} {...props}>
-      {children}
-    </button>
-  )
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  as: ElementType
+}
+
+function Button({ className: additionStyles = '', as: Component, ...props }: ButtonProps) {
+  return createElement(Component, {
+    className: `rounded-md p-2 hover:bg-slate-700 ${additionStyles}`,
+    ...props,
+  })
 }
 
 export default Button

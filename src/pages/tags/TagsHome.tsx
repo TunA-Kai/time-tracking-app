@@ -20,7 +20,7 @@ function TagsHome({}: TagsHomeProps) {
       : sortTags.filter(t => t.name.toLowerCase().includes(searchQuery.toLowerCase()))
 
   return (
-    <div>
+    <>
       <ActionBar
         type='tag'
         sortType={sortType}
@@ -49,7 +49,7 @@ function TagsHome({}: TagsHomeProps) {
           </li>
         ))}
       </ul>
-    </div>
+    </>
   )
 }
 

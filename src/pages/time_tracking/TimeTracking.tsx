@@ -1,7 +1,9 @@
+import { PageLayout } from '../../components'
+
 interface TimeTrackingProps {}
 
 function TimeTracking({}: TimeTrackingProps) {
-    return <div>TimeTracking Component</div>
+  return <PageLayout title='Time tracking'>Hello Kai</PageLayout>
 }
 
 export default TimeTracking
