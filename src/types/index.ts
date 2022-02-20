@@ -1,10 +1,8 @@
 import { Timestamp } from 'firebase/firestore'
 import type { Dispatch, SetStateAction } from 'react'
 
-type Id = string
-
 interface TItem {
-  id: Id
+  id: string
   date: Timestamp
   name: string
   details: string
@@ -12,7 +10,7 @@ interface TItem {
 }
 
 interface TTask extends TItem {
-  tagIds: Id[]
+  tagIds: string[]
 }
 
 interface TTag extends TItem {}
@@ -22,4 +20,11 @@ type TSortOption = 'A to Z' | 'Z to A' | 'Oldest first' | 'Newest first' | 'Colo
 
 type SetValue<T> = Dispatch<SetStateAction<T>>
 
+enum FireStoreCollection {
+  TASKS = 'tasks',
+  TAGS = 'tags',
+  WORKUNIT = 'work_unit',
+}
+
 export type { TTask, TTag, TSortOption, SetValue, TItem, TComponentType }
+export { FireStoreCollection }

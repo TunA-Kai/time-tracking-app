@@ -8,9 +8,7 @@ import { TSortOption } from '../../types'
 import { sortList } from '../../utils/helpers/sortList'
 import { useLocalStorage } from '../../utils/hooks'
 
-interface TasksHomeProps {}
-
-function TasksHome({}: TasksHomeProps) {
+function TasksHome() {
   const { tasks } = useTaskContext()
   const { tags } = useTagContext()
   const [sortType, setSortType] = useLocalStorage<TSortOption>('task_sort_type', 'Newest first')

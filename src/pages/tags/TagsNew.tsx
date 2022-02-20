@@ -6,8 +6,8 @@ import { Link, useParams } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import { ColorPicker } from '../../components'
 import { useTagContext } from '../../contexts/tagContext/tagContext'
-import { useTaskContext } from '../../contexts/taskContext/taskContext'
 import { db } from '../../firebaseConfig'
+import { FireStoreCollection } from '../../types'
 import { DEFAULT_TAG_COLOR, DEFAULT_TAG_NAME } from '../../utils/constants/defaultValue'
 
 interface TagsNewProps {
@@ -15,7 +15,6 @@ interface TagsNewProps {
 }
 
 function TagsNew({ edit }: TagsNewProps) {
-  const { tasks } = useTaskContext()
   const { tagId } = useParams()
   const { getTag, updateTag, deleteTag, addTag } = useTagContext()
   const {
@@ -35,16 +34,18 @@ function TagsNew({ edit }: TagsNewProps) {
       name: tagName === '' ? '⚠️⚠️⚠️ Empty tag name ⚠️⚠️⚠️' : tagName,
       details: tagDetail,
     }
-    newTag.id && setDoc(doc(db, 'tags', newTag.id), newTag)
+    newTag.id && setDoc(doc(db, FireStoreCollection.TAGS, newTag.id), newTag)
     edit ? updateTag(newTag) : addTag(newTag)
   }
 
   function handleDelete() {
     if (tagId) {
-      deleteDoc(doc(db, 'tags', tagId))
+      deleteDoc(doc(db, FireStoreCollection.TAGS, tagId))
       deleteTag(tagId)
     }
   }
+
+  if (tagId && !getTag(tagId)) return <h2>There is no tag with ID: {tagId}</h2>
 
   return (
     <form className='max-w-md space-y-4'>

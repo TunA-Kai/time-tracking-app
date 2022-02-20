@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app'
 import { collection, getFirestore } from 'firebase/firestore'
+import { FireStoreCollection } from './types'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -17,8 +18,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
-const tasksColRef = collection(db, 'tasks')
-const tagsColRef = collection(db, 'tags')
-const workUnitsColRef = collection(db, 'work_unit')
+const tasksColRef = collection(db, FireStoreCollection.TASKS)
+const tagsColRef = collection(db, FireStoreCollection.TAGS)
+const workUnitsColRef = collection(db, FireStoreCollection.WORKUNIT)
 
 export { app, db, tagsColRef, tasksColRef, workUnitsColRef }

@@ -8,7 +8,7 @@ import { ColorPicker, ItemPicker } from '../../components'
 import { useTagContext } from '../../contexts/tagContext/tagContext'
 import { useTaskContext } from '../../contexts/taskContext/taskContext'
 import { db } from '../../firebaseConfig'
-import { TTask } from '../../types'
+import { FireStoreCollection } from '../../types'
 import { DEFAULT_TASK_COLOR, DEFAULT_TASK_NAME } from '../../utils/constants/defaultValue'
 
 interface TasksNewProps {
@@ -40,13 +40,13 @@ function TasksNew({ edit }: TasksNewProps) {
       tagIds,
     }
 
-    setDoc(doc(db, 'tasks', newTask.id), newTask)
+    setDoc(doc(db, FireStoreCollection.TASKS, newTask.id), newTask)
     edit ? updateTask(newTask) : addTask(newTask)
   }
 
   function handleDelete() {
     if (taskId) {
-      deleteDoc(doc(db, 'tasks', taskId))
+      deleteDoc(doc(db, FireStoreCollection.TASKS, taskId))
       deleteTask(taskId)
     }
   }
@@ -59,6 +59,8 @@ function TasksNew({ edit }: TasksNewProps) {
     e.stopPropagation()
     setTagIds(tagIds.filter(tagId => tagId !== id))
   }
+
+  if (taskId && !getTask(taskId)) return <h2>There is no task with ID: {taskId}</h2>
 
   return (
     <form className='max-w-md space-y-4'>

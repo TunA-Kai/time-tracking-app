@@ -1,4 +1,4 @@
-import { getDocs, onSnapshot } from 'firebase/firestore'
+import { getDocs } from 'firebase/firestore'
 import * as React from 'react'
 import { tagsColRef } from '../../firebaseConfig'
 import { SetValue, TTag } from '../../types'
@@ -39,8 +39,8 @@ function useTagContext() {
     setTags(tags.filter(t => t.id !== tagId))
   }
   function updateTag(newTag: TTag) {
-    const newTags = tags.filter(t => t.id !== newTag.id)
-    setTags([...newTags, newTag])
+    const newTags = tags.map(t => (t.id === newTag.id ? { ...newTag } : t))
+    setTags(newTags)
   }
   function getTag(tagId: string) {
     return tags.find(t => t.id === tagId)

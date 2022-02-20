@@ -1,4 +1,4 @@
-import { getDocs, onSnapshot } from 'firebase/firestore'
+import { getDocs } from 'firebase/firestore'
 import * as React from 'react'
 import { tasksColRef } from '../../firebaseConfig'
 import { SetValue, TTask } from '../../types'
@@ -39,8 +39,8 @@ function useTaskContext() {
     setTasks(tasks.filter(t => t.id !== taskId))
   }
   function updateTask(newTask: TTask) {
-    const newTasks = tasks.filter(t => t.id !== newTask.id)
-    setTasks([...newTasks, newTask])
+    const newTasks = tasks.map(t => (t.id === newTask.id ? { ...newTask } : t))
+    setTasks(newTasks)
   }
   function getTask(taskId: string) {
     return tasks.find(t => t.id === taskId)
