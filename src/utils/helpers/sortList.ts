@@ -18,7 +18,8 @@ function sortList<T extends TItem>(list: T[], sortType: TSortOption) {
       })
 
     case 'Newest first':
-      return listCopy.sort((t1, t2) => t2.date.getTime() - t1.date.getTime())
+      return listCopy
+    // return listCopy.sort((t1, t2) => t2.date.getTime() - t1.date.getTime())
 
     case 'Oldest first':
       return listCopy

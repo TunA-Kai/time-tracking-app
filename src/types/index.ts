@@ -1,20 +1,21 @@
+import { Timestamp } from 'firebase/firestore'
 import type { Dispatch, SetStateAction } from 'react'
 
+type Id = string
+
 interface TItem {
-  id: number
-  date: Date
+  id: Id
+  date: Timestamp
   name: string
   details: string
   color: string
 }
 
 interface TTask extends TItem {
-  tags: TTag[]
+  tagIds: Id[]
 }
 
-interface TTag extends TItem {
-  tasks: TTask[]
-}
+interface TTag extends TItem {}
 
 type TComponentType = 'task' | 'tag'
 type TSortOption = 'A to Z' | 'Z to A' | 'Oldest first' | 'Newest first' | 'Color'

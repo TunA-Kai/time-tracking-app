@@ -1,5 +1,6 @@
+import { getDocs, onSnapshot } from 'firebase/firestore'
 import * as React from 'react'
-import { mockTasks } from '../../utils/mocks/mockTasks'
+import { tasksColRef } from '../../firebaseConfig'
 import { SetValue, TTask } from '../../types'
 
 interface TaskContextType {
@@ -10,8 +11,20 @@ interface TaskContextType {
 const TaskContext = React.createContext<TaskContextType | undefined>(undefined)
 
 function TaskProvider({ children }: { children: React.ReactNode }) {
-  const [tasks, setTasks] = React.useState<TTask[]>(mockTasks)
+  const [tasks, setTasks] = React.useState<TTask[]>([])
   const contextValue = { tasks, setTasks }
+
+  React.useEffect(() => {
+    async function getTasks() {
+      const snapshot = await getDocs(tasksColRef)
+      const tasks: TTask[] = []
+      snapshot.forEach(doc => tasks.push(doc.data() as TTask))
+      setTasks(tasks)
+      console.log(tasks)
+    }
+    getTasks()
+  }, [])
+
   return <TaskContext.Provider value={contextValue}>{children}</TaskContext.Provider>
 }
 
@@ -22,14 +35,14 @@ function useTaskContext() {
   function addTask(newTask: TTask) {
     setTasks([...tasks, newTask])
   }
-  function deleteTask(taskId: number) {
+  function deleteTask(taskId: string) {
     setTasks(tasks.filter(t => t.id !== taskId))
   }
   function updateTask(newTask: TTask) {
     const newTasks = tasks.filter(t => t.id !== newTask.id)
     setTasks([...newTasks, newTask])
   }
-  function getTask(taskId: number) {
+  function getTask(taskId: string) {
     return tasks.find(t => t.id === taskId)
   }
   return { tasks, addTask, deleteTask, updateTask, getTask }

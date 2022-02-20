@@ -2,7 +2,23 @@ import { Outlet } from 'react-router-dom'
 import { SideBar } from '.'
 import { TagProvider } from '../contexts/tagContext/tagContext'
 import { TaskProvider } from '../contexts/taskContext/taskContext'
+// import { collection, addDoc } from 'firebase/firestore'
+// import { db } from '../firebaseConfig'
 
+// async function test() {
+//   try {
+//     const docRef = await addDoc(collection(db, 'users'), {
+//       first: 'Ada',
+//       last: 'Lovelace',
+//       born: 1815,
+//     })
+//     console.log('Document written with ID: ', docRef.id)
+//   } catch (e) {
+//     console.error('Error adding document: ', e)
+//   }
+// }
+
+// test()
 interface AppLayoutProps {}
 
 function AppLayout({}: AppLayoutProps) {

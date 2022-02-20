@@ -1,54 +1,49 @@
+import { deleteDoc, doc, setDoc, Timestamp } from 'firebase/firestore'
 import * as React from 'react'
 import { BsArrowLeftCircle, BsSave2 } from 'react-icons/bs'
 import { FaTrash } from 'react-icons/fa'
 import { Link, useParams } from 'react-router-dom'
-import { ColorPicker, ItemPicker } from '../../components'
+import { v4 as uuidv4 } from 'uuid'
+import { ColorPicker } from '../../components'
 import { useTagContext } from '../../contexts/tagContext/tagContext'
-import { TTask } from '../../types'
+import { useTaskContext } from '../../contexts/taskContext/taskContext'
+import { db } from '../../firebaseConfig'
 import { DEFAULT_TAG_COLOR, DEFAULT_TAG_NAME } from '../../utils/constants/defaultValue'
-import { mockTasks } from '../../utils/mocks/mockTasks'
 
 interface TagsNewProps {
   edit?: true
 }
 
 function TagsNew({ edit }: TagsNewProps) {
-  const tagId = Number(useParams().tagId) // Number(undefined) = NaN
-  const { addTag, getTag, deleteTag, updateTag, tags } = useTagContext()
+  const { tasks } = useTaskContext()
+  const { tagId } = useParams()
+  const { getTag, updateTag, deleteTag, addTag } = useTagContext()
   const {
     color: currentColor = DEFAULT_TAG_COLOR,
     name: currentName = DEFAULT_TAG_NAME,
     details: currentDetail = '',
-    tasks: currentTasks = [],
-  } = getTag(tagId) ?? {}
+  } = tagId ? getTag(tagId) ?? {} : {}
   const [color, setColor] = React.useState<string>(currentColor)
   const [tagName, setTagName] = React.useState<string>(currentName)
   const [tagDetail, setTagDetail] = React.useState<string>(currentDetail)
-  const [tasks, setTasks] = React.useState<TTask[]>(currentTasks)
 
   function handleSave() {
     const newTag = {
-      id: edit ? tagId : tags.length + 1,
-      date: new Date(),
+      id: tagId ? tagId : uuidv4(),
+      date: Timestamp.now(),
       color,
       name: tagName === '' ? '⚠️⚠️⚠️ Empty tag name ⚠️⚠️⚠️' : tagName,
       details: tagDetail,
-      tasks,
     }
+    newTag.id && setDoc(doc(db, 'tags', newTag.id), newTag)
     edit ? updateTag(newTag) : addTag(newTag)
   }
 
   function handleDelete() {
-    deleteTag(tagId)
-  }
-
-  // useCallback here because it is in the dependency list in Listbox component
-  const handleAddTask = React.useCallback(function handleAddTask(task: TTask) {
-    setTasks(oldTasks => [...oldTasks, task])
-  }, [])
-  function handleDeleteTask(e: React.MouseEvent, id: number) {
-    e.stopPropagation()
-    setTasks(tasks.filter(task => task.id !== id))
+    if (tagId) {
+      deleteDoc(doc(db, 'tags', tagId))
+      deleteTag(tagId)
+    }
   }
 
   return (
@@ -76,14 +71,6 @@ function TagsNew({ edit }: TagsNewProps) {
       </label>
 
       <ColorPicker color={color} setColor={setColor} />
-
-      <ItemPicker
-        type='task'
-        allItemList={mockTasks}
-        pickedItemList={tasks}
-        onChange={handleAddTask}
-        onDelete={handleDeleteTask}
-      />
 
       <div className='flex gap-2'>
         <Link to='..' className='button border-2 border-slate-700'>

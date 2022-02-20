@@ -1,6 +1,6 @@
 import { TTag } from '../../types'
 
-const mockTags: TTag[] = [
+const mockTags = [
   {
     id: 1,
     date: new Date(),
