@@ -23,7 +23,7 @@ function ActionBar({ type, sortType, setSortType, searchQuery, setSearchQuery }:
         </Menu.Button>
         <Menu.Items
           as='ul'
-          className='absolute right-1/2 w-max translate-x-1/2 translate-y-2 rounded-md border-2 border-sky-500 bg-slate-800 p-2'
+          className='absolute z-50 w-max translate-y-2 rounded-md border-2 border-sky-500 bg-slate-800 p-2'
         >
           {sortOptions.map(({ id, type }) => (
             <Menu.Item key={id} as='li'>
