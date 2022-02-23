@@ -6,7 +6,6 @@ import { FaPause, FaPlay, FaStop } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import { PageLayout } from '../../components'
-import { useTagContext } from '../../contexts/tagContext/tagContext'
 import { useTaskContext } from '../../contexts/taskContext/taskContext'
 import { useWorkUnitContext } from '../../contexts/workUnitContext/workUnitContext'
 import { db } from '../../firebaseConfig'
@@ -19,14 +18,13 @@ interface TimeTrackingProps {}
 
 function TimeTracking({}: TimeTrackingProps) {
   const { tasks } = useTaskContext()
-  const { tags } = useTagContext()
   const {
     workUnits: collection,
     setWorkUnits: setCollection,
-    workDetail: { workDuration, workStatus },
-    dispatch,
+    timerRef,
+    workStatus,
+    setWorkStatus,
   } = useWorkUnitContext()
-  const timerRef = React.useRef(0)
 
   const workUnits = React.useMemo(
     () =>
@@ -40,21 +38,21 @@ function TimeTracking({}: TimeTrackingProps) {
   )
 
   function startWork() {
-    dispatch({ type: 'start' })
+    setWorkStatus('working')
     timerRef.current = 0
   }
 
   function pauseWork() {
-    dispatch({ type: 'pause' })
+    setWorkStatus('pause')
   }
 
   function continueWork() {
-    dispatch({ type: 'continue' })
+    setWorkStatus('working')
   }
 
   function stopWork() {
     const newWorkUnit = { ...collection[0], end: Timestamp.now(), duration: timerRef.current }
-    dispatch({ type: 'stop' })
+    setWorkStatus('idle')
     setDoc(doc(db, FireStoreCollection.WORKUNIT, newWorkUnit.id), newWorkUnit)
     setCollection([newWorkUnit, ...collection.slice(1)])
   }

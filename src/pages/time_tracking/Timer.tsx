@@ -4,15 +4,13 @@ import { useInterval } from '../../utils/hooks/useInterval'
 
 interface TimerProps {
   currentSecond: number
-  timerRef?: React.MutableRefObject<number>
   isWorking: boolean
 }
 
-function Timer({ currentSecond, timerRef, isWorking }: TimerProps) {
+function Timer({ currentSecond, isWorking }: TimerProps) {
   const [second, setSecond] = React.useState(currentSecond)
   function interval() {
     setSecond(s => s + 1)
-    timerRef && timerRef.current++
   }
 
   second % 60 === 0 && console.log(second)

@@ -23,7 +23,7 @@ function FirstDateBlock({ date, workUnits, isWorking, timerRef, isIdle }: FirstD
   const totalWorkDuration = workUnits.reduce((a, b) => a + (b.duration ?? 0), 0)
 
   return (
-    <Disclosure as='li'>
+    <Disclosure as='li' defaultOpen={true}>
       {({ open }) => (
         <>
           <Disclosure.Button className='flex w-full items-center gap-1 rounded-sm bg-slate-700 px-2 py-4 font-semibold'>
@@ -33,7 +33,7 @@ function FirstDateBlock({ date, workUnits, isWorking, timerRef, isIdle }: FirstD
               <Timer currentSecond={timerRef.current + totalWorkDuration} isWorking={isWorking} />
             </span>
           </Disclosure.Button>
-          <Disclosure.Panel static as='div' className={`${open ? 'block' : 'hidden'}`}>
+          <Disclosure.Panel unmount={false}>
             {workUnits.map((wku, index) => {
               const task = tasks.find(t => t.id === wku.taskId)
               const activeTags = tags.filter(t => task?.tagIds.includes(t.id))
@@ -60,11 +60,7 @@ function FirstDateBlock({ date, workUnits, isWorking, timerRef, isIdle }: FirstD
                   <div className='absolute right-2 top-0 flex h-full items-center gap-1'>
                     {!isIdle && index === 0 ? (
                       <>
-                        <Timer
-                          currentSecond={timerRef.current}
-                          timerRef={timerRef}
-                          isWorking={isWorking}
-                        />
+                        <Timer currentSecond={timerRef.current} isWorking={isWorking} />
                         <GiClockwiseRotation
                           className={`${
                             isWorking ? 'animate-[spin_2s_linear_infinite]' : ''

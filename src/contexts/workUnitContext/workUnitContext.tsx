@@ -2,48 +2,31 @@ import * as React from 'react'
 import { workUnitsColRef } from '../../firebaseConfig'
 import { SetValue, TWorkUnit } from '../../types'
 import { useGetCollectionFirebase } from '../../utils/hooks/useGetCollectionFirebase'
+import { useInterval } from '../../utils/hooks/useInterval'
 
-interface TWorkState {
-  workStatus: 'idle' | 'working' | 'pause'
-  workDuration: number
-}
-
-type TWorkAction = { type: 'start' | 'pause' | 'continue' | 'stop' | 'working' }
+type TWorkStatus = 'idle' | 'working' | 'pause'
 
 interface WorkUnitContextType {
   workUnits: TWorkUnit[]
   setWorkUnits: SetValue<TWorkUnit[]>
-  workDetail: TWorkState
-  dispatch: React.Dispatch<TWorkAction>
+  timerRef: React.MutableRefObject<number>
+  workStatus: TWorkStatus
+  setWorkStatus: SetValue<TWorkStatus>
 }
 
 const WorkUnitContext = React.createContext<WorkUnitContextType | undefined>(undefined)
 WorkUnitContext.displayName = 'WorkUnitContext'
 
-function workReducer(state: TWorkState, action: TWorkAction): TWorkState {
-  switch (action.type) {
-    case 'start':
-      return { workStatus: 'working', workDuration: 0 }
-    case 'working':
-      return { ...state, workDuration: state.workDuration + 1 }
-    case 'pause':
-      return { ...state, workStatus: 'pause' }
-    case 'continue':
-      return { ...state, workStatus: 'working' }
-    case 'stop':
-      return { ...state, workStatus: 'idle' }
-  }
-}
-
 function WorkUnitProvider({ children }: { children: React.ReactNode }) {
   const [workUnits, setWorkUnits] = useGetCollectionFirebase<TWorkUnit>(workUnitsColRef)
-  const [workDetail, dispatch] = React.useReducer(workReducer, {
-    workStatus: 'idle',
-    workDuration: 0,
-  })
+  const timerRef = React.useRef(0)
+  const [workStatus, setWorkStatus] = React.useState<TWorkStatus>('idle')
+
+  useInterval(() => timerRef.current++, workStatus === 'working' ? 1000 : null)
+
   const contextValue = React.useMemo(
-    () => ({ workUnits, setWorkUnits, workDetail, dispatch }),
-    [setWorkUnits, workDetail, workUnits],
+    () => ({ workUnits, setWorkUnits, timerRef, workStatus, setWorkStatus }),
+    [setWorkUnits, workStatus, workUnits],
   )
   return <WorkUnitContext.Provider value={contextValue}>{children}</WorkUnitContext.Provider>
 }
