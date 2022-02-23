@@ -1,7 +1,7 @@
-import { getDocs } from 'firebase/firestore'
 import * as React from 'react'
 import { tagsColRef } from '../../firebaseConfig'
 import { SetValue, TTag } from '../../types'
+import { useGetCollectionFirebase } from '../../utils/hooks/useGetCollectionFirebase'
 
 interface TagContextType {
   tags: TTag[]
@@ -9,21 +9,11 @@ interface TagContextType {
 }
 
 const TagContext = React.createContext<TagContextType | undefined>(undefined)
+TagContext.displayName = 'TagContext'
 
 function TagProvider({ children }: { children: React.ReactNode }) {
-  const [tags, setTags] = React.useState<TTag[]>([])
-  const contextValue = { tags, setTags }
-
-  React.useEffect(() => {
-    async function getTags() {
-      const snapshot = await getDocs(tagsColRef)
-      const tags: TTag[] = []
-      snapshot.forEach(doc => tags.push(doc.data() as TTag))
-      setTags(tags)
-      console.log(tags)
-    }
-    getTags()
-  }, [])
+  const [tags, setTags] = useGetCollectionFirebase<TTag>(tagsColRef)
+  const contextValue = React.useMemo(() => ({ tags, setTags }), [setTags, tags])
 
   return <TagContext.Provider value={contextValue}>{children}</TagContext.Provider>
 }

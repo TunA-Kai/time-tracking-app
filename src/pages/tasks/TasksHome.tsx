@@ -6,7 +6,7 @@ import { useTagContext } from '../../contexts/tagContext/tagContext'
 import { useTaskContext } from '../../contexts/taskContext/taskContext'
 import { TSortOption } from '../../types'
 import { sortList } from '../../utils/helpers/sortList'
-import { useLocalStorage } from '../../utils/hooks'
+import { useLocalStorage } from '../../utils/hooks/useLocalStorage'
 
 function TasksHome() {
   const { tasks } = useTaskContext()

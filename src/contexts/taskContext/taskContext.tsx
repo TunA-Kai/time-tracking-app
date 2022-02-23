@@ -1,7 +1,7 @@
-import { getDocs } from 'firebase/firestore'
 import * as React from 'react'
 import { tasksColRef } from '../../firebaseConfig'
 import { SetValue, TTask } from '../../types'
+import { useGetCollectionFirebase } from '../../utils/hooks/useGetCollectionFirebase'
 
 interface TaskContextType {
   tasks: TTask[]
@@ -9,21 +9,11 @@ interface TaskContextType {
 }
 
 const TaskContext = React.createContext<TaskContextType | undefined>(undefined)
+TaskContext.displayName = 'TaskContext'
 
 function TaskProvider({ children }: { children: React.ReactNode }) {
-  const [tasks, setTasks] = React.useState<TTask[]>([])
-  const contextValue = { tasks, setTasks }
-
-  React.useEffect(() => {
-    async function getTasks() {
-      const snapshot = await getDocs(tasksColRef)
-      const tasks: TTask[] = []
-      snapshot.forEach(doc => tasks.push(doc.data() as TTask))
-      setTasks(tasks)
-      console.log(tasks)
-    }
-    getTasks()
-  }, [])
+  const [tasks, setTasks] = useGetCollectionFirebase<TTask>(tasksColRef)
+  const contextValue = React.useMemo(() => ({ tasks, setTasks }), [setTasks, tasks])
 
   return <TaskContext.Provider value={contextValue}>{children}</TaskContext.Provider>
 }

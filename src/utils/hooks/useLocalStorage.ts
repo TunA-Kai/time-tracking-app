@@ -60,7 +60,7 @@ function useLocalStorage<T>(key: string, initialValue: T): [T, SetValue<T>] {
   return [storedValue, setValue]
 }
 
-export default useLocalStorage
+export { useLocalStorage }
 
 // A wrapper for "JSON.parse()"" to support "undefined" value
 function parseJSON<T>(value: string | null): T | undefined {

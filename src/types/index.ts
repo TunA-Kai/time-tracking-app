@@ -15,6 +15,17 @@ interface TTask extends TItem {
 
 interface TTag extends TItem {}
 
+interface TWorkUnit {
+  id: string
+  taskId: string
+  date: string // Mon, 2/21/2022
+  start: Timestamp
+  end: Timestamp
+  duration?: number
+  description?: string
+  details?: string
+}
+
 type TComponentType = 'task' | 'tag'
 type TSortOption = 'A to Z' | 'Z to A' | 'Oldest first' | 'Newest first' | 'Color'
 
@@ -26,5 +37,5 @@ enum FireStoreCollection {
   WORKUNIT = 'work_unit',
 }
 
-export type { TTask, TTag, TSortOption, SetValue, TItem, TComponentType }
+export type { TTask, TTag, TSortOption, SetValue, TItem, TComponentType, TWorkUnit }
 export { FireStoreCollection }
