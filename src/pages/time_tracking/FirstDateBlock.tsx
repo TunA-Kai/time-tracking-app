@@ -37,8 +37,14 @@ function FirstDateBlock({ date, workUnits, isWorking, timerRef, isIdle }: FirstD
             {workUnits.map((wku, index) => {
               const task = tasks.find(t => t.id === wku.taskId)
               const activeTags = tags.filter(t => task?.tagIds.includes(t.id))
+              const isTheFirstAndActive = !isIdle && index === 0
               return (
-                <div key={wku.id} className='relative mt-1 bg-slate-800 py-2 px-3'>
+                <div
+                  key={wku.id}
+                  className={`relative mt-1 py-2 px-3 ${
+                    isTheFirstAndActive ? 'bg-sky-900' : 'bg-slate-800'
+                  }`}
+                >
                   <div
                     className={`${task?.color} absolute left-0 top-0 h-full w-1 rounded-l rounded-r`}
                   ></div>
@@ -58,7 +64,7 @@ function FirstDateBlock({ date, workUnits, isWorking, timerRef, isIdle }: FirstD
                     )}
                   </div>
                   <div className='absolute right-2 top-0 flex h-full items-center gap-1'>
-                    {!isIdle && index === 0 ? (
+                    {isTheFirstAndActive ? (
                       <>
                         <Timer currentSecond={timerRef.current} isWorking={isWorking} />
                         <GiClockwiseRotation

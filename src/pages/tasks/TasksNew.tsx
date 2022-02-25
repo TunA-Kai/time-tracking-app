@@ -68,7 +68,7 @@ function TasksNew({ edit }: TasksNewProps) {
         <span className='block'>Task name</span>
         <input
           type='text'
-          className='input w-full'
+          className='input'
           value={taskName}
           onChange={e => setTaskName(e.currentTarget.value)}
           onFocus={e => e.currentTarget.value === DEFAULT_TASK_NAME && e.currentTarget.select()}
@@ -79,7 +79,7 @@ function TasksNew({ edit }: TasksNewProps) {
         <span className='block'>Details</span>
         <textarea
           rows={7}
-          className='input w-full resize-none'
+          className='input resize-none'
           value={taskDetail}
           onChange={e => setTaskDetail(e.target.value)}
           placeholder='What exactly do you want to do?'

@@ -1,73 +1,51 @@
-// hook from : https://usehooks-ts.com/react-hook/use-local-storage
+// from: https://github.com/kentcdodds/react-hooks/blob/next/src/utils.tsx
 
-import { useEffect, useState } from 'react'
-import { SetValue } from '../../types'
+import * as React from 'react'
 
-function useLocalStorage<T>(key: string, initialValue: T): [T, SetValue<T>] {
-  // Get from local storage then
-  // parse stored json or return initialValue
-  const readValue = (): T => {
-    // Prevent build error "window is undefined" but keep keep working
-    if (typeof window === 'undefined') {
-      return initialValue
+type UseLocalStorageOptions<TState = unknown> = {
+  serialize?: (data: TState) => string
+  deserialize?: (str: string) => TState
+}
+
+/**
+ *
+ * @param {String} key The key to set in localStorage for this value
+ * @param {Object} defaultValue The value to use if it is not already in localStorage
+ * @param {{serialize: Function, deserialize: Function}} options The serialize and deserialize functions to use (defaults to JSON.stringify and JSON.parse respectively)
+ */
+function useLocalStorage<TState>(
+  key: string,
+  defaultValue: TState | (() => TState),
+  { serialize = JSON.stringify, deserialize = JSON.parse }: UseLocalStorageOptions<TState> = {},
+) {
+  const [state, setState] = React.useState(() => {
+    const valueInLocalStorage = window.localStorage.getItem(key)
+    if (valueInLocalStorage) {
+      // the try/catch is here in case the localStorage value was set before
+      // we had the serialization in place
+      try {
+        return deserialize(valueInLocalStorage)
+      } catch (error) {
+        window.localStorage.removeItem(key)
+      }
     }
+    // can't do typeof because:
+    // https://github.com/microsoft/TypeScript/issues/37663#issuecomment-759728342
+    return defaultValue instanceof Function ? defaultValue() : defaultValue
+  })
 
-    try {
-      const item = window.localStorage.getItem(key)
-      return item ? (parseJSON(item) as T) : initialValue
-    } catch (error) {
-      console.warn(`Error reading localStorage key “${key}”:`, error)
-      return initialValue
+  const prevKeyRef = React.useRef(key)
+
+  React.useEffect(() => {
+    const prevKey = prevKeyRef.current
+    if (prevKey !== key) {
+      window.localStorage.removeItem(prevKey)
     }
-  }
+    prevKeyRef.current = key
+    window.localStorage.setItem(key, serialize(state))
+  }, [key, state, serialize])
 
-  // State to store our value
-  // Pass initial state function to useState so logic is only executed once
-  const [storedValue, setStoredValue] = useState<T>(readValue)
-
-  // Return a wrapped version of useState's setter function that ...
-  // ... persists the new value to localStorage.
-  const setValue: SetValue<T> = value => {
-    // Prevent build error "window is undefined" but keeps working
-    if (typeof window == 'undefined') {
-      console.warn(
-        `Tried setting localStorage key “${key}” even though environment is not a client`,
-      )
-    }
-
-    try {
-      // Allow value to be a function so we have the same API as useState
-      const newValue = value instanceof Function ? value(storedValue) : value
-
-      // Save to local storage
-      window.localStorage.setItem(key, JSON.stringify(newValue))
-
-      // Save state
-      setStoredValue(newValue)
-
-      // We dispatch a custom event so every useLocalStorage hook are notified
-      // window.dispatchEvent(new Event('local-storage'))
-    } catch (error) {
-      console.warn(`Error setting localStorage key “${key}”:`, error)
-    }
-  }
-
-  useEffect(() => {
-    setStoredValue(readValue())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  return [storedValue, setValue]
+  return [state, setState] as const
 }
 
 export { useLocalStorage }
-
-// A wrapper for "JSON.parse()"" to support "undefined" value
-function parseJSON<T>(value: string | null): T | undefined {
-  try {
-    return value === 'undefined' ? undefined : JSON.parse(value ?? '')
-  } catch (error) {
-    console.log('parsing error on', { value })
-    return undefined
-  }
-}

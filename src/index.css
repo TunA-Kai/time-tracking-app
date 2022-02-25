@@ -4,12 +4,157 @@
 @tailwind components;
 @tailwind utilities;
 
+/* -------------------------------------------------------------------------- */
+/*                             HEADER: DATE PICKER                            */
+/* -------------------------------------------------------------------------- */
+.react-datepicker-popper {
+  @apply inset-0 z-40 w-auto rounded border-2 border-sky-500 bg-slate-800 px-4 py-2 text-sm text-slate-50;
+}
+
+.react-datepicker__portal {
+  @apply absolute top-12 right-0 z-10 w-72 transform-none rounded border-2 border-gray-200 bg-white px-3 py-2 text-sm shadow;
+}
+
+.react-datepicker__month-container {
+  @apply flex flex-col;
+}
+
+.react-datepicker__month {
+  @apply flex flex-col;
+}
+
+.react-datepicker__current-month {
+  @apply ml-2.5 text-lg font-semibold;
+}
+
+.react-datepicker__week {
+  @apply flex justify-around;
+}
+
+.react-datepicker__day-names {
+  @apply flex justify-around text-center text-xs font-medium;
+}
+
+.react-datepicker__day-name {
+  @apply flex h-8 w-8 items-center justify-center rounded-full py-1;
+}
+
+.react-datepicker__navigation {
+  @apply absolute top-2;
+}
+
+.react-datepicker__navigation--previous {
+  @apply right-12 flex h-8 w-8 items-center justify-center rounded transition hover:bg-gray-200;
+}
+
+.react-datepicker__navigation--next {
+  @apply right-4 flex h-8 w-8 items-center justify-center rounded transition hover:bg-gray-200;
+}
+
+.react-datepicker__day {
+  @apply mb-1 flex h-8 w-8 items-center justify-center rounded py-1 text-sm leading-loose hover:bg-slate-50 hover:text-slate-900;
+}
+
+.react-datepicker__day--disabled {
+  @apply cursor-not-allowed opacity-40 hover:bg-transparent;
+}
+
+.react-datepicker__day--outside-month {
+  @apply text-slate-600;
+}
+
+.react-datepicker__day--in-range {
+  @apply bg-gray-200;
+}
+
+.react-datepicker__day--in-selecting-range {
+  @apply bg-blue-200;
+}
+
+.react-datepicker__day--selecting-range-start {
+  @apply border-2 border-blue-500 bg-white;
+}
+
+.react-datepicker__day--selecting-range-end {
+  @apply border-2 border-blue-500 bg-white;
+}
+
+.react-datepicker__day.react-datepicker__day--selected {
+  @apply bg-blue-500 text-white;
+}
+
+.react-datepicker__day--range-start {
+  @apply bg-blue-500 text-white hover:bg-white hover:text-gray-700;
+}
+
+.react-datepicker__day--range-end {
+  @apply bg-blue-500 text-white hover:bg-white hover:text-gray-700;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                             HEADER: HOUR PICKER                            */
+/* -------------------------------------------------------------------------- */
+
+.react-datepicker {
+  @apply flex w-full justify-center;
+}
+
+.react-datepicker__time-container {
+  @apply flex w-24 flex-col justify-center;
+}
+
+.react-datepicker__time--box {
+  @apply scrollbar-thin scrollbar-track-slate-800 scrollbar-thumb-sky-500;
+}
+.react-datepicker__header.react-datepicker__header--time.react-datepicker__header--time--only {
+  @apply mb-2 border-b-2 border-sky-500;
+}
+
+.react-datepicker-time__header {
+  @apply !ml-0 !border-0 text-center !text-slate-50;
+}
+
+.react-datepicker__time-list {
+  @apply h-40 w-full overflow-y-auto p-2 scrollbar scrollbar-track-slate-900 scrollbar-thumb-sky-500;
+}
+
+.react-datepicker__time-list-item {
+  @apply rounded-sm p-2 text-center hover:bg-slate-50 hover:text-slate-900;
+}
+
+.react-datepicker__time-list-item.react-datepicker__time-list-item--selected {
+  @apply bg-blue-500 text-white;
+}
+
+.react-datepicker-time__header {
+  @apply ml-2.5 border-2 py-1 text-base font-semibold text-gray-800;
+}
+/* -------------------------------------------------------------------------- */
+/*                         HEADER: TAILWIND COMPONENTS                        */
+/* -------------------------------------------------------------------------- */
+
 @layer components {
   .input {
-    @apply rounded-md border-b border-slate-200 bg-slate-700 p-2 text-slate-50 focus:border-sky-500 focus:bg-slate-800 focus:outline-none;
+    @apply w-full rounded-md border-b border-slate-200 bg-slate-700 p-2 text-slate-50 focus:border-sky-500 focus:bg-slate-800 focus:outline-none;
   }
 
   .button {
     @apply flex items-center gap-1 rounded-md p-2 hover:bg-slate-700;
+  }
+}
+
+/*  HIDE Scrollbar
+    https://github.com/tailwindlabs/tailwindcss/discussions/2394
+    https://github.com/tailwindlabs/tailwindcss/pull/5732
+*/
+@layer utilities {
+  /* Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 }

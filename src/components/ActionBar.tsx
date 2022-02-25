@@ -46,7 +46,7 @@ function ActionBar({ type, sortType, setSortType, searchQuery, setSearchQuery }:
         type='search'
         value={searchQuery}
         onChange={e => setSearchQuery(e.currentTarget.value)}
-        className='input grow'
+        className='input w-auto grow'
         placeholder='Seach...'
       />
 

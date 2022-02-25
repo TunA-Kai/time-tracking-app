@@ -13,7 +13,7 @@ function Timer({ currentSecond, isWorking }: TimerProps) {
     setSecond(s => s + 1)
   }
 
-  second % 60 === 0 && console.log(second)
+  // second % 60 === 0 && console.log(second)
 
   useInterval(interval, isWorking ? 1000 : null)
 
