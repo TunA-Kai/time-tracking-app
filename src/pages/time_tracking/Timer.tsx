@@ -3,12 +3,12 @@ import { secondToHour } from '../../utils/helpers/secondToHour'
 import { useInterval } from '../../utils/hooks/useInterval'
 
 interface TimerProps {
-  currentSecond: number
+  initialSecond: number
   isWorking: boolean
 }
 
-function Timer({ currentSecond, isWorking }: TimerProps) {
-  const [second, setSecond] = React.useState(currentSecond)
+function Timer({ initialSecond, isWorking }: TimerProps) {
+  const [second, setSecond] = React.useState(initialSecond)
   function interval() {
     setSecond(s => s + 1)
   }

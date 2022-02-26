@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { AiOutlineTag } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
-import { ActionBar } from '../../components'
+import { ActionBar, LabelTag } from '../../components'
 import { useTagContext } from '../../contexts/tagContext/tagContext'
 import { useTaskContext } from '../../contexts/taskContext/taskContext'
 import { TSortOption } from '../../types'
@@ -38,13 +38,10 @@ function TasksHome() {
                 {tags
                   .filter(tag => t.tagIds.includes(tag.id))
                   .map(tag => (
-                    <div
-                      key={tag.id}
-                      className={`${tag.color} flex items-center gap-1 rounded-sm px-1 text-slate-900`}
-                    >
+                    <LabelTag key={tag.id} as='div' additionStyles={`${tag.color}`}>
                       <AiOutlineTag />
                       {tag.name}
-                    </div>
+                    </LabelTag>
                   ))}
               </div>
             </Link>

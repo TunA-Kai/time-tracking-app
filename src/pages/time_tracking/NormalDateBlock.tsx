@@ -1,6 +1,7 @@
 import { Disclosure } from '@headlessui/react'
 import { AiOutlineTag } from 'react-icons/ai'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
+import { LabelTag } from '../../components'
 import { useTagContext } from '../../contexts/tagContext/tagContext'
 import { useTaskContext } from '../../contexts/taskContext/taskContext'
 import { TWorkUnit } from '../../types'
@@ -38,13 +39,10 @@ function NormalDateBlock({ date, workUnits }: NormalDateBlockProps) {
                     {activeTags.map(
                       tag =>
                         tag && (
-                          <div
-                            key={tag.id}
-                            className={`${tag.color} mt-1 flex items-center gap-1 rounded-sm px-1 text-slate-900`}
-                          >
+                          <LabelTag key={tag.id} as='div' additionStyles={`${tag.color} mt-1`}>
                             <AiOutlineTag />
                             {tag.name}
-                          </div>
+                          </LabelTag>
                         ),
                     )}
                   </div>

@@ -4,9 +4,10 @@ import { createElement, ElementType } from 'react'
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   as: ElementType
+  additionStyles: string
 }
 
-function Button({ className: additionStyles = '', as: Component, ...props }: ButtonProps) {
+function Button({ additionStyles = '', as: Component, ...props }: ButtonProps) {
   return createElement(Component, {
     className: `rounded-md p-2 hover:bg-slate-700 ${additionStyles}`,
     ...props,

@@ -18,11 +18,16 @@ function getNow() {
 }
 
 function WorkUnitEdit({}: WorkUnitEditProps) {
-  const { tasks: allTasks } = useTaskContext()
-  const [task, setTask] = React.useState<TTask>(allTasks[0])
+  const { tasks: allTasks, getTask } = useTaskContext()
+
+  // should store taskId instead of task to avoid duplication in state
+  // https://beta.reactjs.org/learn/choosing-the-state-structure#avoid-duplication-in-state
+  const [taskId, setTaskId] = React.useState<string>(allTasks[0].id)
   const [date, setDate] = React.useState<Date>(getNow)
   const [hourStart, setHourStart] = React.useState<Date>(getNow)
   const [hourEnd, setHourEnd] = React.useState<Date>(getNow)
+
+  const selectedTask = getTask(taskId)
 
   return (
     <form className='basis-1/3'>
@@ -53,16 +58,16 @@ function WorkUnitEdit({}: WorkUnitEditProps) {
           Details
           <textarea rows={3} className='input block resize-none'></textarea>
         </label>
-        <Listbox value={task} onChange={setTask} as='div' className='relative'>
+        <Listbox value={taskId} onChange={setTaskId} as='div' className='relative'>
           <Listbox.Label>Choose a task</Listbox.Label>
           <Listbox.Button className='flex w-full items-center justify-between rounded-md bg-slate-700 p-2'>
-            <span className={`${task.color} mr-2 h-4 w-4 rounded-full`}></span>
-            {task.name}
+            <span className={`${selectedTask?.color} mr-2 h-4 w-4 rounded-full`}></span>
+            {selectedTask?.name}
             <BsChevronExpand className='ml-auto' />
           </Listbox.Button>
           <Listbox.Options className='absolute top-0 left-0 z-50 w-max -translate-y-[85%] rounded-md border-2 border-sky-500 bg-slate-800 p-2'>
             {allTasks.map(t => (
-              <Listbox.Option value={t} key={t.id}>
+              <Listbox.Option value={t.id} key={t.id}>
                 {({ selected }) => (
                   <button className={`${selected ? 'bg-sky-900' : ''} button w-full gap-2 px-1`}>
                     <span className={`${t.color} h-4 w-4 rounded-full`}></span>
@@ -71,12 +76,12 @@ function WorkUnitEdit({}: WorkUnitEditProps) {
                 )}
               </Listbox.Option>
             ))}
-            <Listbox.Option value={undefined} as='li'>
+            <li>
               <Link to={`/tasks/new`} className='button gap-2 px-1'>
                 <BsPlusCircle />
                 <span>Create new task</span>
               </Link>
-            </Listbox.Option>
+            </li>
           </Listbox.Options>
         </Listbox>
 

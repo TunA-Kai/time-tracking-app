@@ -17,3 +17,5 @@
   <DatePicker date={date} setDate={setDate} />
 </label>
 ```
+
+- [Style scrollbar](https://css-tricks.com/almanac/properties/s/scrollbar/)

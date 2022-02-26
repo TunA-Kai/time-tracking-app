@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom'
-import { SideBar } from '.'
-import DataProvider from '../contexts/DataProvider'
+import { SideBar } from '..'
+import DataProvider from '../../contexts/DataProvider'
 
 interface AppLayoutProps {}
 

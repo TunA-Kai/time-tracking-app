@@ -2,7 +2,7 @@ import { deleteDoc, doc, setDoc, Timestamp } from 'firebase/firestore'
 import * as React from 'react'
 import { BsArrowLeftCircle, BsSave2 } from 'react-icons/bs'
 import { FaTrash } from 'react-icons/fa'
-import { Link, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import { ColorPicker, ItemPicker } from '../../components'
 import { useTagContext } from '../../contexts/tagContext/tagContext'
@@ -29,6 +29,7 @@ function TasksNew({ edit }: TasksNewProps) {
   const [taskName, setTaskName] = React.useState<string>(currentName)
   const [taskDetail, setTaskDetail] = React.useState<string>(currentDetail)
   const [tagIds, setTagIds] = React.useState<string[]>(currentTags)
+  const navigate = useNavigate()
 
   function handleSave() {
     const newTask = {
@@ -42,6 +43,7 @@ function TasksNew({ edit }: TasksNewProps) {
 
     setDoc(doc(db, FireStoreCollection.TASKS, newTask.id), newTask)
     edit ? updateTask(newTask) : addTask(newTask)
+    navigate('..')
   }
 
   function handleDelete() {
@@ -49,6 +51,7 @@ function TasksNew({ edit }: TasksNewProps) {
       deleteDoc(doc(db, FireStoreCollection.TASKS, taskId))
       deleteTask(taskId)
     }
+    navigate('..')
   }
 
   // useCallback here because it is in the dependency list in Listbox component
@@ -97,21 +100,21 @@ function TasksNew({ edit }: TasksNewProps) {
       />
 
       <div className='flex gap-2'>
-        <Link to='..' className='button border-2 border-slate-700'>
+        <button onClick={() => navigate('..')} className='button border-2 border-slate-700'>
           <BsArrowLeftCircle />
           Back
-        </Link>
+        </button>
 
-        <Link to='..' className='button border-2 border-slate-700' onClick={handleSave}>
+        <button className='button border-2 border-slate-700' onClick={handleSave}>
           <BsSave2 />
           Save
-        </Link>
+        </button>
 
         {edit && (
-          <Link to='..' onClick={handleDelete} className='button ml-auto border-2 border-slate-700'>
+          <button onClick={handleDelete} className='button ml-auto border-2 border-slate-700'>
             <FaTrash />
             Delete
-          </Link>
+          </button>
         )}
       </div>
     </form>

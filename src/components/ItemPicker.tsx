@@ -1,6 +1,7 @@
 import { Listbox } from '@headlessui/react'
 import { BsBackspace, BsChevronExpand, BsPlusCircle } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
+import { LabelTag } from '.'
 import { TComponentType, TItem } from '../types'
 
 function ItemPicker<T extends TItem>({
@@ -24,15 +25,12 @@ function ItemPicker<T extends TItem>({
             <li>Pick a {type}</li>
           ) : (
             pickedItemList.map(t => (
-              <li
-                key={t.id}
-                className={`${t.color} flex items-center gap-1 rounded-sm px-1 text-slate-900`}
-              >
+              <LabelTag as='li' key={t.id} additionStyles={`${t.color}`}>
                 {t.name}
                 <span onClick={e => onDelete(e, t.id)}>
                   <BsBackspace />
                 </span>
-              </li>
+              </LabelTag>
             ))
           )}
         </ul>
