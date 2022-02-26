@@ -8,7 +8,7 @@ import { ColorPicker } from '../../components'
 import { useTagContext } from '../../contexts/tagContext/tagContext'
 import { db } from '../../firebaseConfig'
 import { FireStoreCollection } from '../../types'
-import { DEFAULT_TAG_COLOR, DEFAULT_TAG_NAME } from '../../utils/constants/defaultValue'
+import { DEFAULT } from '../../utils/constants/defaultValue'
 
 interface TagsNewProps {
   edit?: true
@@ -18,8 +18,8 @@ function TagsNew({ edit }: TagsNewProps) {
   const { tagId } = useParams()
   const { getTag, updateTag, deleteTag, addTag } = useTagContext()
   const {
-    color: currentColor = DEFAULT_TAG_COLOR,
-    name: currentName = DEFAULT_TAG_NAME,
+    color: currentColor = DEFAULT.TAG_COLOR,
+    name: currentName = DEFAULT.TAG_NAME,
     details: currentDetail = '',
   } = tagId ? getTag(tagId) ?? {} : {}
   const [color, setColor] = React.useState<string>(currentColor)
@@ -56,7 +56,7 @@ function TagsNew({ edit }: TagsNewProps) {
           className='input w-full'
           value={tagName}
           onChange={e => setTagName(e.currentTarget.value)}
-          onFocus={e => e.currentTarget.value === DEFAULT_TAG_NAME && e.currentTarget.select()}
+          onFocus={e => e.currentTarget.value === DEFAULT.TAG_NAME && e.currentTarget.select()}
           autoFocus
         />
       </label>

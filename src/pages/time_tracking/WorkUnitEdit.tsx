@@ -7,6 +7,7 @@ import { VscChromeClose } from 'react-icons/vsc'
 import { Link } from 'react-router-dom'
 import { useTaskContext } from '../../contexts/taskContext/taskContext'
 import { TTask } from '../../types'
+import { DEFAULT } from '../../utils/constants/defaultValue'
 import ButtonInput from './ButtonInput'
 import DatePicker from './DatePicker'
 import HourPicker from './HourPicker'
@@ -22,7 +23,7 @@ function WorkUnitEdit({}: WorkUnitEditProps) {
 
   // should store taskId instead of task to avoid duplication in state
   // https://beta.reactjs.org/learn/choosing-the-state-structure#avoid-duplication-in-state
-  const [taskId, setTaskId] = React.useState<string>(allTasks[0].id)
+  const [taskId, setTaskId] = React.useState<TTask['id']>(allTasks[0].id)
   const [date, setDate] = React.useState<Date>(getNow)
   const [hourStart, setHourStart] = React.useState<Date>(getNow)
   const [hourEnd, setHourEnd] = React.useState<Date>(getNow)
@@ -99,7 +100,7 @@ function WorkUnitEdit({}: WorkUnitEditProps) {
             customInput={
               <ButtonInput
                 icon={<FaHourglassStart className='text-sky-400' />}
-                text={format(new Date(hourStart), 'hh : mm aa')}
+                text={format(new Date(hourStart), DEFAULT.HOUR_FORMAT)}
               />
             }
           />

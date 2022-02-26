@@ -9,7 +9,7 @@ import { useTagContext } from '../../contexts/tagContext/tagContext'
 import { useTaskContext } from '../../contexts/taskContext/taskContext'
 import { db } from '../../firebaseConfig'
 import { FireStoreCollection } from '../../types'
-import { DEFAULT_TASK_COLOR, DEFAULT_TASK_NAME } from '../../utils/constants/defaultValue'
+import { DEFAULT } from '../../utils/constants/defaultValue'
 
 interface TasksNewProps {
   edit?: true
@@ -20,8 +20,8 @@ function TasksNew({ edit }: TasksNewProps) {
   const { taskId } = useParams()
   const { getTask, updateTask, addTask, deleteTask } = useTaskContext()
   const {
-    color: currentColor = DEFAULT_TASK_COLOR,
-    name: currentName = DEFAULT_TASK_NAME,
+    color: currentColor = DEFAULT.TASK_COLOR,
+    name: currentName = DEFAULT.TASK_NAME,
     details: currentDetail = '',
     tagIds: currentTags = [],
   } = taskId ? getTask(taskId) ?? {} : {}
@@ -74,7 +74,7 @@ function TasksNew({ edit }: TasksNewProps) {
           className='input'
           value={taskName}
           onChange={e => setTaskName(e.currentTarget.value)}
-          onFocus={e => e.currentTarget.value === DEFAULT_TASK_NAME && e.currentTarget.select()}
+          onFocus={e => e.currentTarget.value === DEFAULT.TASK_NAME && e.currentTarget.select()}
           autoFocus
         />
       </label>

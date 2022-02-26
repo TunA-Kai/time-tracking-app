@@ -1,4 +1,5 @@
 import { Menu } from '@headlessui/react'
+import { format } from 'date-fns'
 import { doc, setDoc, Timestamp } from 'firebase/firestore'
 import * as React from 'react'
 import { BsPlusCircle, BsPlusLg } from 'react-icons/bs'
@@ -10,8 +11,7 @@ import { useTaskContext } from '../../contexts/taskContext/taskContext'
 import { useWorkUnitContext } from '../../contexts/workUnitContext/workUnitContext'
 import { db } from '../../firebaseConfig'
 import { FireStoreCollection, TWorkUnit } from '../../types'
-import { DEFAULT_EDIT_WORKUNIT_ID } from '../../utils/constants/defaultValue'
-import { formatDate } from '../../utils/helpers/formatDate'
+import { DEFAULT } from '../../utils/constants/defaultValue'
 import FirstDateBlock from './FirstDateBlock'
 import NormalDateBlock from './NormalDateBlock'
 import WorkUnitEdit from './WorkUnitEdit'
@@ -75,7 +75,7 @@ function TimeTracking() {
   }
 
   function addWorkUnit(taskId: string) {
-    const date = formatDate(new Date())
+    const date = format(new Date(), DEFAULT.DATE_FORMAT)
     startWork()
     const newWorkUnit = {
       id: uuidv4(),
@@ -92,7 +92,7 @@ function TimeTracking() {
       <div className='flex gap-4'>
         <div className='grow'>
           <div className='flex gap-1'>
-            <button className='button' onClick={() => setEditId(DEFAULT_EDIT_WORKUNIT_ID)}>
+            <button className='button' onClick={() => setEditId(DEFAULT.EDIT_WORKUNIT_ID)}>
               <BsPlusLg />
               Add work unit
             </button>
@@ -147,7 +147,7 @@ function TimeTracking() {
           <ul className='scrollbar mt-2 h-[28rem] space-y-1 overflow-y-auto'>
             {dateKeys.length > 0 && (
               <>
-                {dateKeys[0] === formatDate(new Date()) ? (
+                {dateKeys[0] === format(new Date(), DEFAULT.DATE_FORMAT) ? (
                   <FirstDateBlock
                     date={dateKeys[0]}
                     workUnits={workUnits[dateKeys[0]]}

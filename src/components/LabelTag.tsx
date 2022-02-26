@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-// I don't even know why this works
+// I don't even know what I'm doing
 interface LabelTagProps<T = React.ElementType> extends React.HTMLAttributes<T> {
   as?: T
   additionStyles: string

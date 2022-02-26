@@ -1,5 +1,5 @@
 import { Disclosure } from '@headlessui/react'
-import React from 'react'
+import * as React from 'react'
 import { AiOutlineTag } from 'react-icons/ai'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import { GiClockwiseRotation } from 'react-icons/gi'

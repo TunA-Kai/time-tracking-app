@@ -1,14 +1,11 @@
-const DEFAULT_TASK_NAME = 'New task'
-const DEFAULT_TASK_COLOR = 'bg-sky-400'
-const DEFAULT_TAG_NAME = 'New tag'
-const DEFAULT_TAG_COLOR = 'bg-lime-400'
+export enum DEFAULT {
+  TASK_NAME = 'New task',
+  TASK_COLOR = 'bg-sky-400',
+  TAG_NAME = 'New tag',
+  TAG_COLOR = 'bg-lime-400',
 
-const DEFAULT_EDIT_WORKUNIT_ID = 'new' as const
+  EDIT_WORKUNIT_ID = 'new',
 
-export {
-  DEFAULT_TASK_COLOR,
-  DEFAULT_TAG_NAME,
-  DEFAULT_TASK_NAME,
-  DEFAULT_TAG_COLOR,
-  DEFAULT_EDIT_WORKUNIT_ID,
+  DATE_FORMAT = 'EEE, LL/dd/yyyy',
+  HOUR_FORMAT = 'hh : mm aa',
 }
