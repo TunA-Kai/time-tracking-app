@@ -22,7 +22,7 @@ function DatePicker({ date, setDate }: DatePickerProps) {
           text={format(new Date(date), 'EEE, LL/dd/yyyy')}
         />
       }
-      popperPlacement='top-end'
+      popperPlacement='top-start'
       renderCustomHeader={({
         date,
         decreaseMonth,

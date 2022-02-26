@@ -103,9 +103,6 @@
   @apply flex w-24 flex-col justify-center;
 }
 
-.react-datepicker__time--box {
-  @apply scrollbar-thin scrollbar-track-slate-800 scrollbar-thumb-sky-500;
-}
 .react-datepicker__header.react-datepicker__header--time.react-datepicker__header--time--only {
   @apply mb-2 border-b-2 border-sky-500;
 }
@@ -115,11 +112,11 @@
 }
 
 .react-datepicker__time-list {
-  @apply h-40 w-full overflow-y-auto p-2 scrollbar scrollbar-track-slate-900 scrollbar-thumb-sky-500;
+  @apply scrollbar h-40 w-full overflow-y-auto p-2;
 }
 
 .react-datepicker__time-list-item {
-  @apply rounded-sm p-2 text-center hover:bg-slate-50 hover:text-slate-900;
+  @apply cursor-pointer rounded-sm p-2 text-center hover:bg-slate-50 hover:text-slate-900;
 }
 
 .react-datepicker__time-list-item.react-datepicker__time-list-item--selected {
@@ -156,5 +153,17 @@
   .no-scrollbar {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+  }
+
+  .scrollbar::-webkit-scrollbar {
+    @apply w-1;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    @apply bg-slate-900;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-sky-500;
   }
 }

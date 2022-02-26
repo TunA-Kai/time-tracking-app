@@ -18,7 +18,7 @@ function HourPicker({ customInput, hour, setHour, timeCaption }: HourPickerProps
       showTimeSelectOnly
       timeIntervals={15}
       timeCaption={timeCaption}
-      popperPlacement='top-end'
+      popperPlacement='top-start'
       customInput={customInput}
     />
   )

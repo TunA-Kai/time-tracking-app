@@ -144,7 +144,7 @@ function TimeTracking() {
             )}
           </div>
 
-          <ul className='mt-2 space-y-1'>
+          <ul className='scrollbar mt-2 h-[28rem] space-y-1 overflow-y-auto'>
             {dateKeys.length > 0 && (
               <>
                 {dateKeys[0] === formatDate(new Date()) ? (

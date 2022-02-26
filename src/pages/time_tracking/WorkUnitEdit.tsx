@@ -13,12 +13,16 @@ import HourPicker from './HourPicker'
 
 interface WorkUnitEditProps {}
 
+function getNow() {
+  return new Date()
+}
+
 function WorkUnitEdit({}: WorkUnitEditProps) {
   const { tasks: allTasks } = useTaskContext()
   const [task, setTask] = React.useState<TTask>(allTasks[0])
-  const [date, setDate] = React.useState<Date>(new Date())
-  const [hourStart, setHourStart] = React.useState<Date>(new Date())
-  const [hourEnd, setHourEnd] = React.useState<Date>(new Date())
+  const [date, setDate] = React.useState<Date>(getNow)
+  const [hourStart, setHourStart] = React.useState<Date>(getNow)
+  const [hourEnd, setHourEnd] = React.useState<Date>(getNow)
 
   return (
     <form className='basis-1/3'>
@@ -40,7 +44,7 @@ function WorkUnitEdit({}: WorkUnitEditProps) {
         </button>
       </div>
 
-      <div className='max-w-sm space-y-1'>
+      <div className='scrollbar h-[28rem] max-w-sm space-y-4 overflow-y-auto'>
         <label className='block'>
           Description
           <input type='text' className='input block' />
@@ -56,7 +60,7 @@ function WorkUnitEdit({}: WorkUnitEditProps) {
             {task.name}
             <BsChevronExpand className='ml-auto' />
           </Listbox.Button>
-          <Listbox.Options className='absolute top-0 right-0 z-50 w-max -translate-y-[90%] rounded-md border-2 border-sky-500 bg-slate-800 p-2'>
+          <Listbox.Options className='absolute top-0 left-0 z-50 w-max -translate-y-[85%] rounded-md border-2 border-sky-500 bg-slate-800 p-2'>
             {allTasks.map(t => (
               <Listbox.Option value={t} key={t.id}>
                 {({ selected }) => (
@@ -76,12 +80,12 @@ function WorkUnitEdit({}: WorkUnitEditProps) {
           </Listbox.Options>
         </Listbox>
 
-        <div>
+        <div className='relative'>
           Day
           <DatePicker date={date} setDate={setDate} />
         </div>
 
-        <div>
+        <div className='relative'>
           Start of work
           <HourPicker
             timeCaption='Start At'
@@ -96,7 +100,7 @@ function WorkUnitEdit({}: WorkUnitEditProps) {
           />
         </div>
 
-        <div>
+        <div className='relative'>
           End of work
           <HourPicker
             timeCaption='End At'
