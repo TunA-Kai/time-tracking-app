@@ -16,9 +16,19 @@ interface FirstDateBlockProps {
   isWorking: boolean
   isIdle: boolean
   timerRef: React.MutableRefObject<number>
+  toggleEdit: (id: string) => void
+  editId: string | undefined
 }
 
-function FirstDateBlock({ date, workUnits, isWorking, timerRef, isIdle }: FirstDateBlockProps) {
+function FirstDateBlock({
+  date,
+  workUnits,
+  isWorking,
+  timerRef,
+  isIdle,
+  toggleEdit,
+  editId,
+}: FirstDateBlockProps) {
   const { tasks } = useTaskContext()
   const { tags } = useTagContext()
   const totalWorkDuration = workUnits.reduce((a, b) => a + (b.duration ?? 0), 0)
@@ -27,7 +37,7 @@ function FirstDateBlock({ date, workUnits, isWorking, timerRef, isIdle }: FirstD
     <Disclosure as='li' defaultOpen={true}>
       {({ open }) => (
         <>
-          <Disclosure.Button className='flex w-full items-center gap-1 rounded-sm bg-slate-700 px-2 py-4 font-semibold'>
+          <Disclosure.Button className='flex w-full items-center gap-1 rounded-sm bg-slate-700 px-2 py-4 font-semibold hover:bg-slate-600'>
             {open ? <FaChevronUp /> : <FaChevronDown />}
             {date}
             <span className='ml-auto'>
@@ -39,16 +49,23 @@ function FirstDateBlock({ date, workUnits, isWorking, timerRef, isIdle }: FirstD
               const task = tasks.find(t => t.id === wku.taskId)
               const activeTags = tags.filter(t => task?.tagIds.includes(t.id))
               const isTheFirstAndActive = !isIdle && index === 0
+              const isEditing = wku.id === editId
+
               return (
                 <div
                   key={wku.id}
-                  className={`relative mt-1 py-2 px-3 ${
-                    isTheFirstAndActive ? 'bg-sky-900' : 'bg-slate-800'
+                  className={`relative mt-1 cursor-pointer py-2 px-3 ${
+                    isTheFirstAndActive
+                      ? 'bg-sky-900 hover:bg-sky-800'
+                      : isEditing
+                      ? 'bg-sky-800 hover:bg-sky-700'
+                      : 'bg-slate-800 hover:bg-slate-700'
                   }`}
+                  onClick={() => toggleEdit(wku.id)}
                 >
                   <div
                     className={`${task?.color} absolute left-0 top-0 h-full w-1 rounded-l rounded-r`}
-                  ></div>
+                  />
                   {task?.name}
                   <div className='flex gap-1'>
                     {activeTags.map(

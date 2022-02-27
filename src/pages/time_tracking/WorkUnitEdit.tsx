@@ -1,50 +1,87 @@
 import { Listbox } from '@headlessui/react'
 import { format } from 'date-fns'
+import { Timestamp } from 'firebase/firestore'
 import * as React from 'react'
 import { BsChevronExpand, BsPlusCircle, BsSave2 } from 'react-icons/bs'
 import { FaHourglassEnd, FaHourglassStart, FaTrash } from 'react-icons/fa'
 import { VscChromeClose } from 'react-icons/vsc'
 import { Link } from 'react-router-dom'
+import { v4 as uuidv4 } from 'uuid'
 import { useTaskContext } from '../../contexts/taskContext/taskContext'
-import { TTask } from '../../types'
+import { useWorkUnitContext } from '../../contexts/workUnitContext/workUnitContext'
+import { TTask, TWorkUnit } from '../../types'
 import { DEFAULT } from '../../utils/constants/defaultValue'
 import ButtonInput from './ButtonInput'
 import DatePicker from './DatePicker'
 import HourPicker from './HourPicker'
 
-interface WorkUnitEditProps {}
+interface WorkUnitEditProps {
+  editId: string | undefined
+  closeEdit: () => void
+  deleteWorkUnit: (wkuId: string) => void
+  addWorkUnit: (newWorkUnit: TWorkUnit) => void
+}
 
 function getNow() {
   return new Date()
 }
 
-function WorkUnitEdit({}: WorkUnitEditProps) {
+function WorkUnitEdit({ editId, closeEdit, deleteWorkUnit, addWorkUnit }: WorkUnitEditProps) {
   const { tasks: allTasks, getTask } = useTaskContext()
+  const { workUnits } = useWorkUnitContext()
+
+  const activeWorkUnit = workUnits.find(w => w.id === editId)
 
   // should store taskId instead of task to avoid duplication in state
   // https://beta.reactjs.org/learn/choosing-the-state-structure#avoid-duplication-in-state
-  const [taskId, setTaskId] = React.useState<TTask['id']>(allTasks[0].id)
-  const [date, setDate] = React.useState<Date>(getNow)
-  const [hourStart, setHourStart] = React.useState<Date>(getNow)
-  const [hourEnd, setHourEnd] = React.useState<Date>(getNow)
+  const [taskId, setTaskId] = React.useState<TTask['id']>(activeWorkUnit?.taskId ?? allTasks[0].id)
+  const [date, setDate] = React.useState<Date>(
+    activeWorkUnit?.date ? new Date(activeWorkUnit.date) : getNow,
+  )
+  const [hourStart, setHourStart] = React.useState<Date>(activeWorkUnit?.start.toDate() ?? getNow)
+  const [hourEnd, setHourEnd] = React.useState<Date>(activeWorkUnit?.end.toDate() ?? getNow)
 
   const selectedTask = getTask(taskId)
 
   return (
-    <form className='basis-1/3'>
-      <div className='flex justify-end gap-1'>
-        {true ? (
-          <button className='button'>
+    <form
+      className='basis-full md:basis-1/3'
+      onSubmit={e => {
+        e.preventDefault()
+        // https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/forms_and_events
+        const target = e.target as typeof e.target & {
+          description: { value: string }
+          details: { value: string }
+        }
+        const newWorkUnit: TWorkUnit = {
+          id: activeWorkUnit?.id ?? uuidv4(),
+          taskId,
+          date: format(date, DEFAULT.DATE_FORMAT),
+          start: Timestamp.fromDate(hourStart),
+          end: Timestamp.fromDate(hourEnd),
+          duration: (hourEnd.getTime() - hourStart.getTime()) / 1000,
+          description: target.description.value,
+          details: target.details.value,
+        }
+        addWorkUnit(newWorkUnit)
+      }}
+    >
+      <div className='flex justify-start gap-1 md:justify-end'>
+        <button className='button mr-auto' type='button' onClick={closeEdit}>
+          <VscChromeClose />
+          Close
+        </button>
+        {activeWorkUnit && (
+          <button
+            className='button'
+            type='button'
+            onClick={() => deleteWorkUnit(activeWorkUnit.id)}
+          >
             <FaTrash />
             Delete
           </button>
-        ) : (
-          <button className='button'>
-            <VscChromeClose />
-            Close
-          </button>
         )}
-        <button className='button'>
+        <button className='button' type='submit'>
           <BsSave2 />
           Save
         </button>
@@ -53,11 +90,21 @@ function WorkUnitEdit({}: WorkUnitEditProps) {
       <div className='scrollbar h-[28rem] max-w-sm space-y-4 overflow-y-auto'>
         <label className='block'>
           Description
-          <input type='text' className='input block' />
+          <input
+            type='text'
+            name='description'
+            className='input block'
+            defaultValue={activeWorkUnit?.description}
+          />
         </label>
         <label className='block'>
           Details
-          <textarea rows={3} className='input block resize-none'></textarea>
+          <textarea
+            rows={3}
+            className='input block resize-none'
+            defaultValue={activeWorkUnit?.details}
+            name='details'
+          ></textarea>
         </label>
         <Listbox value={taskId} onChange={setTaskId} as='div' className='relative'>
           <Listbox.Label>Choose a task</Listbox.Label>

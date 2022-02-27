@@ -10,9 +10,11 @@ import { secondToHour } from '../../utils/helpers/secondToHour'
 interface NormalDateBlockProps {
   date: string
   workUnits: TWorkUnit[]
+  toggleEdit: (id: string) => void
+  editId: string | undefined
 }
 
-function NormalDateBlock({ date, workUnits }: NormalDateBlockProps) {
+function NormalDateBlock({ date, workUnits, toggleEdit, editId }: NormalDateBlockProps) {
   const { tasks } = useTaskContext()
   const { tags } = useTagContext()
   const totalWorkDuration = secondToHour(workUnits.reduce((a, b) => a + (b.duration ?? 0), 0))
@@ -20,7 +22,7 @@ function NormalDateBlock({ date, workUnits }: NormalDateBlockProps) {
     <Disclosure as='li'>
       {({ open }) => (
         <>
-          <Disclosure.Button className='flex w-full items-center gap-1 rounded-sm bg-slate-700 px-2 py-4 font-semibold'>
+          <Disclosure.Button className='flex w-full items-center gap-1 rounded-sm bg-slate-700 px-2 py-4 font-semibold hover:bg-slate-600'>
             {open ? <FaChevronUp /> : <FaChevronDown />}
             {date}
             <span className='ml-auto'>{totalWorkDuration}</span>
@@ -29,11 +31,18 @@ function NormalDateBlock({ date, workUnits }: NormalDateBlockProps) {
             {workUnits.map(wku => {
               const task = tasks.find(t => t.id === wku.taskId)
               const activeTags = tags.filter(t => task?.tagIds.includes(t.id))
+              const isEditing = wku.id === editId
               return (
-                <div key={wku.id} className='relative mt-1 bg-slate-800 py-2 px-3'>
+                <div
+                  key={wku.id}
+                  className={`${
+                    isEditing ? 'bg-sky-800 hover:bg-sky-700' : 'bg-slate-800 hover:bg-slate-700'
+                  } relative mt-1 cursor-pointer py-2 px-3`}
+                  onClick={() => toggleEdit(wku.id)}
+                >
                   <div
                     className={`${task?.color} absolute left-0 top-0 h-full w-1 rounded-l rounded-r`}
-                  ></div>
+                  />
                   {task?.name}
                   <div className='flex gap-1'>
                     {activeTags.map(
