@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { ColorPicker, ItemPicker } from '../../components'
 import { useTagContext } from '../../contexts/tagContext/tagContext'
 import { useTaskContext } from '../../contexts/taskContext/taskContext'
+import { useWorkUnitContext } from '../../contexts/workUnitContext/workUnitContext'
 import { db } from '../../firebaseConfig'
 import { FireStoreCollection } from '../../types'
 import { DEFAULT } from '../../utils/constants/defaultValue'
@@ -19,6 +20,7 @@ function TasksNew({ edit }: TasksNewProps) {
   const { tags } = useTagContext()
   const { taskId } = useParams()
   const { getTask, updateTask, addTask, deleteTask } = useTaskContext()
+  const { workUnits, setWorkUnits } = useWorkUnitContext()
   const {
     color: currentColor = DEFAULT.TASK_COLOR,
     name: currentName = DEFAULT.TASK_NAME,
@@ -50,6 +52,12 @@ function TasksNew({ edit }: TasksNewProps) {
     if (taskId) {
       deleteDoc(doc(db, FireStoreCollection.TASKS, taskId))
       deleteTask(taskId)
+
+      // delete all related Work Unit to this task
+      setWorkUnits(workUnits.filter(w => w.taskId !== taskId))
+      workUnits.forEach(
+        w => w.taskId === taskId && deleteDoc(doc(db, FireStoreCollection.WORKUNIT, w.id)),
+      )
     }
     navigate('..')
   }

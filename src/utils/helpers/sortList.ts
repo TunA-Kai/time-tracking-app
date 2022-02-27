@@ -18,11 +18,10 @@ function sortList<T extends TItem>(list: T[], sortType: TSortOption) {
       })
 
     case 'Newest first':
-      return listCopy
-    // return listCopy.sort((t1, t2) => t2.date.getTime() - t1.date.getTime())
+      return listCopy.sort((t1, t2) => t2.date.seconds - t1.date.seconds)
 
     case 'Oldest first':
-      return listCopy
+      return listCopy.sort((t1, t2) => t1.date.seconds - t2.date.seconds)
 
     case 'Color':
       return listCopy.sort((t1, t2) => {
