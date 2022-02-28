@@ -1,12 +1,15 @@
 import { Timestamp } from 'firebase/firestore'
+import { colorOption } from '../utils/constants/colorOptions'
 import type { Dispatch, SetStateAction } from 'react'
+
+type ItemColor = keyof typeof colorOption
 
 interface TItem {
   id: string
   date: Timestamp
   name: string
   details: string
-  color: string
+  color: ItemColor
 }
 
 interface TTask extends TItem {
@@ -37,5 +40,5 @@ enum FireStoreCollection {
   WORKUNIT = 'work_unit',
 }
 
-export type { TTask, TTag, TSortOption, SetValue, TItem, TComponentType, TWorkUnit }
+export type { TTask, TTag, TSortOption, SetValue, TItem, TComponentType, TWorkUnit, ItemColor }
 export { FireStoreCollection }

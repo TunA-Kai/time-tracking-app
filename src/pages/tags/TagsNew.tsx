@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { ColorPicker } from '../../components'
 import { useTagContext } from '../../contexts/tagContext/tagContext'
 import { db } from '../../firebaseConfig'
-import { FireStoreCollection } from '../../types'
+import { FireStoreCollection, ItemColor } from '../../types'
 import { DEFAULT } from '../../utils/constants/defaultValue'
 
 interface TagsNewProps {
@@ -22,7 +22,7 @@ function TagsNew({ edit }: TagsNewProps) {
     name: currentName = DEFAULT.TAG_NAME,
     details: currentDetail = '',
   } = tagId ? getTag(tagId) ?? {} : {}
-  const [color, setColor] = React.useState<string>(currentColor)
+  const [color, setColor] = React.useState<ItemColor>(currentColor)
   const [tagName, setTagName] = React.useState<string>(currentName)
   const [tagDetail, setTagDetail] = React.useState<string>(currentDetail)
 

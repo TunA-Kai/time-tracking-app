@@ -1,12 +1,12 @@
 import { Listbox } from '@headlessui/react'
 import * as React from 'react'
 import { BsCheck2, BsChevronExpand } from 'react-icons/bs'
-import { SetValue } from '../types'
+import { ItemColor, SetValue } from '../types'
 import { colorOption } from '../utils/constants/colorOptions'
 
 interface ColorPickerProps {
-  color: string
-  setColor: SetValue<string>
+  color: ItemColor
+  setColor: SetValue<ItemColor>
 }
 
 function ColorPicker({ color, setColor }: ColorPickerProps) {
@@ -18,7 +18,7 @@ function ColorPicker({ color, setColor }: ColorPickerProps) {
         <BsChevronExpand className='ml-auto' />
       </Listbox.Button>
       <Listbox.Options className='absolute bottom-12 right-0 grid grid-cols-5 gap-2 rounded-md border-2 border-sky-500 bg-slate-800 p-2 lg:-right-3 lg:bottom-0 lg:translate-x-full '>
-        {colorOption.map((c, index) => (
+        {Object.keys(colorOption).map((c, index) => (
           <Listbox.Option key={index} value={c} as={React.Fragment}>
             {({ active, selected }) => (
               <li

@@ -9,7 +9,7 @@ import { useTagContext } from '../../contexts/tagContext/tagContext'
 import { useTaskContext } from '../../contexts/taskContext/taskContext'
 import { useWorkUnitContext } from '../../contexts/workUnitContext/workUnitContext'
 import { db } from '../../firebaseConfig'
-import { FireStoreCollection } from '../../types'
+import { FireStoreCollection, ItemColor } from '../../types'
 import { DEFAULT } from '../../utils/constants/defaultValue'
 
 interface TasksNewProps {
@@ -27,7 +27,7 @@ function TasksNew({ edit }: TasksNewProps) {
     details: currentDetail = '',
     tagIds: currentTags = [],
   } = taskId ? getTask(taskId) ?? {} : {}
-  const [color, setColor] = React.useState<string>(currentColor)
+  const [color, setColor] = React.useState<ItemColor>(currentColor)
   const [taskName, setTaskName] = React.useState<string>(currentName)
   const [taskDetail, setTaskDetail] = React.useState<string>(currentDetail)
   const [tagIds, setTagIds] = React.useState<string[]>(currentTags)
