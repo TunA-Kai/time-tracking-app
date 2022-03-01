@@ -3,6 +3,11 @@ import { colorOption } from '../utils/constants/colorOptions'
 import type { Dispatch, SetStateAction } from 'react'
 
 type ItemColor = keyof typeof colorOption
+/** Mon, 2/21/2022 */
+type DateString = string
+
+type TComponentType = 'task' | 'tag'
+type TSortOption = 'A to Z' | 'Z to A' | 'Oldest first' | 'Newest first' | 'Color'
 
 interface TItem {
   id: string
@@ -21,16 +26,13 @@ interface TTag extends TItem {}
 interface TWorkUnit {
   id: string
   taskId: string
-  date: string // Mon, 2/21/2022
+  date: DateString
   start: Timestamp
   end: Timestamp
   duration?: number
   description?: string
   details?: string
 }
-
-type TComponentType = 'task' | 'tag'
-type TSortOption = 'A to Z' | 'Z to A' | 'Oldest first' | 'Newest first' | 'Color'
 
 type SetValue<T> = Dispatch<SetStateAction<T>>
 
@@ -40,5 +42,15 @@ enum FireStoreCollection {
   WORKUNIT = 'work_unit',
 }
 
-export type { TTask, TTag, TSortOption, SetValue, TItem, TComponentType, TWorkUnit, ItemColor }
+export type {
+  TTask,
+  TTag,
+  TSortOption,
+  SetValue,
+  TItem,
+  TComponentType,
+  TWorkUnit,
+  ItemColor,
+  DateString,
+}
 export { FireStoreCollection }

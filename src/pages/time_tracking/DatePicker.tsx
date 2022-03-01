@@ -3,9 +3,9 @@ import * as React from 'react'
 import ReactDatePicker from 'react-datepicker'
 import { BsCalendar2CheckFill } from 'react-icons/bs'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
+import { ButtonInput } from '../../components'
 import { SetValue } from '../../types'
 import { DEFAULT } from '../../utils/constants/defaultValue'
-import ButtonInput from './ButtonInput'
 
 interface DatePickerProps {
   date: Date
@@ -24,6 +24,7 @@ function DatePicker({ date, setDate }: DatePickerProps) {
         />
       }
       popperPlacement='top-start'
+      fixedHeight
       renderCustomHeader={({ date, decreaseMonth, increaseMonth }) => (
         <div className='flex items-center justify-between px-2 py-2'>
           <span className='text-lg'>{format(date, 'MMMM yyyy')}</span>

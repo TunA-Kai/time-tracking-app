@@ -5,10 +5,11 @@ interface ButtonInputProps {
   icon: JSX.Element
   text: string
   onClick?: () => void
+  additionalStyles?: string
 }
 
 const ButtonInput = React.forwardRef<HTMLButtonElement, ButtonInputProps>(
-  ({ onClick, icon, text }, ref) => {
+  ({ onClick, icon, text, additionalStyles }, ref) => {
     // console.log(value)
     // console.log(onClick)
     return (
@@ -16,7 +17,7 @@ const ButtonInput = React.forwardRef<HTMLButtonElement, ButtonInputProps>(
         onClick={onClick}
         ref={ref}
         type='button'
-        className='flex w-full items-center justify-between gap-2 rounded-md bg-slate-700 p-2'
+        className={`flex w-full items-center justify-between gap-2 rounded-md bg-slate-700 p-2 ${additionalStyles}`}
       >
         {icon}
         {/*@ts-ignore `value` is pass from react-datepicker but cannot find the type definition */}

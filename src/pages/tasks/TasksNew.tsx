@@ -53,7 +53,7 @@ function TasksNew({ edit }: TasksNewProps) {
       deleteDoc(doc(db, FireStoreCollection.TASKS, taskId))
       deleteTask(taskId)
 
-      // delete all related Work Unit to this task
+      // ?? needed ?? delete all related Work Unit to this task
       setWorkUnits(workUnits.filter(w => w.taskId !== taskId))
       workUnits.forEach(
         w => w.taskId === taskId && deleteDoc(doc(db, FireStoreCollection.WORKUNIT, w.id)),

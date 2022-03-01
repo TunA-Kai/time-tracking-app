@@ -18,7 +18,8 @@ import WorkUnitEdit from './WorkUnitEdit'
 
 function TimeTracking() {
   const { tasks } = useTaskContext()
-  const { workUnits, setWorkUnits, timerRef, workStatus, setWorkStatus } = useWorkUnitContext()
+  const { workUnits, setWorkUnits, groupedWorkUnits, timerRef, workStatus, setWorkStatus } =
+    useWorkUnitContext()
   const [edit, dispatchEdit] = React.useReducer(
     (
       state: { isEditing: boolean; editId?: string },
@@ -44,17 +45,6 @@ function TimeTracking() {
   const isWorking = workStatus === 'working'
   const isPause = workStatus === 'pause'
   const isIdle = workStatus === 'idle'
-
-  const groupedWorkUnits = React.useMemo(
-    () =>
-      workUnits.reduce((final, current) => {
-        const { date } = current
-        if (date in final) final[date].push(current)
-        else final[date] = [current]
-        return final
-      }, {} as Record<string, TWorkUnit[]>),
-    [workUnits],
-  )
 
   // form of key: Tue, 02/22/2022
   const dateKeys = React.useMemo(
@@ -82,15 +72,15 @@ function TimeTracking() {
     setWorkUnits([newWorkUnit, ...workUnits])
   }
 
-  function pauseWork() {
+  function handlePauseWork() {
     setWorkStatus('pause')
   }
 
-  function continueWork() {
+  function handleContinueWork() {
     setWorkStatus('working')
   }
 
-  function stopWork() {
+  function handleStopWork() {
     const newWorkUnit = { ...workUnits[0], end: Timestamp.now(), duration: timerRef.current }
     setWorkStatus('idle')
     setDoc(doc(db, FireStoreCollection.WORKUNIT, newWorkUnit.id), newWorkUnit)
@@ -160,17 +150,17 @@ function TimeTracking() {
               </Menu>
             ) : (
               <>
-                <button className='button' onClick={stopWork}>
+                <button className='button' onClick={handleStopWork}>
                   <FaStop />
                   Stop work
                 </button>
                 {isPause ? (
-                  <button className='button' onClick={continueWork}>
+                  <button className='button' onClick={handleContinueWork}>
                     <FaPlay />
                     Continue work
                   </button>
                 ) : (
-                  <button className='button' onClick={pauseWork}>
+                  <button className='button' onClick={handlePauseWork}>
                     <FaPause />
                     Pause work
                   </button>

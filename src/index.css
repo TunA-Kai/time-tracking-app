@@ -20,7 +20,18 @@
 }
 
 .react-datepicker__month {
-  @apply flex flex-col;
+  @apply flex gap-2;
+}
+
+.react-datepicker__month-wrapper {
+  @apply space-y-2;
+}
+
+.react-datepicker__month-text {
+  @apply rounded-sm p-1 text-center hover:bg-slate-50 hover:text-slate-900;
+}
+.react-datepicker__month--selected {
+  @apply bg-blue-500 text-white;
 }
 
 .react-datepicker__current-month {
@@ -136,7 +147,7 @@
   }
 
   .button {
-    @apply flex items-center gap-1 rounded-md p-2 hover:bg-slate-700;
+    @apply inline-flex items-center justify-center gap-1 rounded-md p-2 hover:bg-slate-700;
   }
 }
 
