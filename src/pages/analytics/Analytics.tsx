@@ -8,7 +8,7 @@ import { ButtonInput, PageLayout } from '../../components'
 import Chart from './Chart'
 
 function Analytics() {
-  const [month, setMonth] = React.useState<Date>(new Date(2022, 1, 1))
+  const [month, setMonth] = React.useState<Date>(new Date())
   const [chartType, setChartType] = React.useState<'lines' | 'bars'>('bars')
   const [chartDataType, setChartDataType] = React.useState<'tags' | 'tasks'>('tasks')
 
@@ -17,7 +17,7 @@ function Analytics() {
       <div className='mx-auto -mt-5 mb-5 flex max-w-xl gap-4'>
         <div>
           <button
-            className={`button w-20 rounded-r-none border p-1 ${
+            className={`button w-20 justify-center rounded-r-none border p-1 ${
               chartType === 'lines' ? 'border-sky-600 bg-slate-800' : 'border-slate-700'
             }`}
             onClick={() => setChartType('lines')}
@@ -26,7 +26,7 @@ function Analytics() {
             Lines
           </button>
           <button
-            className={`button w-20 rounded-l-none border p-1 ${
+            className={`button w-20 justify-center rounded-l-none border p-1 ${
               chartType === 'bars' ? 'border-sky-600 bg-slate-800' : 'border-slate-700'
             }`}
             onClick={() => setChartType('bars')}
@@ -37,7 +37,7 @@ function Analytics() {
         </div>
         <div>
           <button
-            className={`button w-20 rounded-r-none border p-1 ${
+            className={`button w-20 justify-center rounded-r-none border p-1 ${
               chartDataType === 'tasks' ? 'border-sky-600 bg-slate-800' : 'border-slate-700'
             }`}
             onClick={() => setChartDataType('tasks')}
@@ -46,7 +46,7 @@ function Analytics() {
             Tasks
           </button>
           <button
-            className={`button w-20 rounded-l-none border p-1 ${
+            className={`button w-20 justify-center rounded-l-none border p-1 ${
               chartDataType === 'tags' ? 'border-sky-600 bg-slate-800' : 'border-slate-700'
             }`}
             onClick={() => setChartDataType('tags')}

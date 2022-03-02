@@ -24,7 +24,7 @@ function DatePicker({ date, setDate }: DatePickerProps) {
         />
       }
       popperPlacement='top-start'
-      fixedHeight
+      // fixedHeight
       renderCustomHeader={({ date, decreaseMonth, increaseMonth }) => (
         <div className='flex items-center justify-between px-2 py-2'>
           <span className='text-lg'>{format(date, 'MMMM yyyy')}</span>

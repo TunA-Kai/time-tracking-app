@@ -1,25 +1,16 @@
 import * as React from 'react'
-import ReactDatePicker from 'react-datepicker'
-import { SetValue } from '../../types'
+import ReactDatePicker, { ReactDatePickerProps } from 'react-datepicker'
 
-interface HourPickerProps {
-  customInput: React.ReactNode
-  timeCaption: string
-  hour: Date
-  setHour: SetValue<Date>
-}
+interface HourPickerProps extends ReactDatePickerProps {}
 
-function HourPicker({ customInput, hour, setHour, timeCaption }: HourPickerProps) {
+function HourPicker(props: HourPickerProps) {
   return (
     <ReactDatePicker
-      selected={hour}
-      onChange={hour => setHour(hour ?? new Date())}
       showTimeSelect
       showTimeSelectOnly
       timeIntervals={15}
-      timeCaption={timeCaption}
       popperPlacement='top-start'
-      customInput={customInput}
+      {...props}
     />
   )
 }

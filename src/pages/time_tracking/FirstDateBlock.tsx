@@ -41,7 +41,11 @@ function FirstDateBlock({
             {open ? <FaChevronUp /> : <FaChevronDown />}
             {date}
             <span className='ml-auto'>
-              <Timer initialSecond={timerRef.current + totalWorkDuration} isWorking={isWorking} />
+              <Timer
+                key={totalWorkDuration}
+                initialSecond={timerRef.current + totalWorkDuration}
+                isWorking={isWorking}
+              />
             </span>
           </Disclosure.Button>
           <Disclosure.Panel unmount={false}>

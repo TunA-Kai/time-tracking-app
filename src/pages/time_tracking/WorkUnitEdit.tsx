@@ -1,5 +1,5 @@
 import { Listbox } from '@headlessui/react'
-import { format } from 'date-fns'
+import { endOfDay, format } from 'date-fns'
 import { Timestamp } from 'firebase/firestore'
 import * as React from 'react'
 import { BsChevronExpand, BsPlusCircle, BsSave2 } from 'react-icons/bs'
@@ -31,52 +31,52 @@ function WorkUnitEdit({ editId, closeEdit, deleteWorkUnit, addWorkUnit }: WorkUn
   const { tasks: allTasks, getTask } = useTaskContext()
   const { workUnits } = useWorkUnitContext()
 
-  const activeWorkUnit = workUnits.find(w => w.id === editId)
+  const chosenWorkUnit = workUnits.find(w => w.id === editId)
 
   // should store taskId instead of task to avoid duplication in state
   // https://beta.reactjs.org/learn/choosing-the-state-structure#avoid-duplication-in-state
-  const [taskId, setTaskId] = React.useState<TTask['id']>(activeWorkUnit?.taskId ?? allTasks[0].id)
+  const [taskId, setTaskId] = React.useState<TTask['id']>(chosenWorkUnit?.taskId ?? allTasks[0].id)
   const [date, setDate] = React.useState<Date>(
-    activeWorkUnit?.date ? new Date(activeWorkUnit.date) : getNow,
+    chosenWorkUnit?.date ? new Date(chosenWorkUnit.date) : getNow,
   )
-  const [hourStart, setHourStart] = React.useState<Date>(activeWorkUnit?.start.toDate() ?? getNow)
-  const [hourEnd, setHourEnd] = React.useState<Date>(activeWorkUnit?.end.toDate() ?? getNow)
+  const [hourStart, setHourStart] = React.useState<Date>(chosenWorkUnit?.start.toDate() ?? getNow)
+  const [hourEnd, setHourEnd] = React.useState<Date>(chosenWorkUnit?.end.toDate() ?? getNow)
 
   const selectedTask = getTask(taskId)
+  const isFinishedWorkUnit = chosenWorkUnit && (chosenWorkUnit.duration ?? 0) > 0
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    // https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/forms_and_events
+    const target = e.target as typeof e.target & {
+      description: { value: string }
+      details: { value: string }
+    }
+    const newWorkUnit: TWorkUnit = {
+      id: chosenWorkUnit?.id ?? uuidv4(),
+      taskId,
+      date: format(date, DEFAULT.DATE_FORMAT),
+      start: Timestamp.fromDate(hourStart),
+      end: Timestamp.fromDate(hourEnd),
+      duration: (hourEnd.getTime() - hourStart.getTime()) / 1000,
+      description: target.description.value,
+      details: target.details.value,
+    }
+    addWorkUnit(newWorkUnit)
+  }
 
   return (
-    <form
-      className='basis-full md:basis-1/3'
-      onSubmit={e => {
-        e.preventDefault()
-        // https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/forms_and_events
-        const target = e.target as typeof e.target & {
-          description: { value: string }
-          details: { value: string }
-        }
-        const newWorkUnit: TWorkUnit = {
-          id: activeWorkUnit?.id ?? uuidv4(),
-          taskId,
-          date: format(date, DEFAULT.DATE_FORMAT),
-          start: Timestamp.fromDate(hourStart),
-          end: Timestamp.fromDate(hourEnd),
-          duration: (hourEnd.getTime() - hourStart.getTime()) / 1000,
-          description: target.description.value,
-          details: target.details.value,
-        }
-        addWorkUnit(newWorkUnit)
-      }}
-    >
+    <form className='basis-full md:basis-1/3' onSubmit={handleSubmit}>
       <div className='flex justify-start gap-1 md:justify-end'>
         <button className='button mr-auto' type='button' onClick={closeEdit}>
           <VscChromeClose />
           Close
         </button>
-        {activeWorkUnit && (
+        {isFinishedWorkUnit && (
           <button
             className='button'
             type='button'
-            onClick={() => deleteWorkUnit(activeWorkUnit.id)}
+            onClick={() => deleteWorkUnit(chosenWorkUnit.id)}
           >
             <FaTrash />
             Delete
@@ -95,15 +95,15 @@ function WorkUnitEdit({ editId, closeEdit, deleteWorkUnit, addWorkUnit }: WorkUn
             type='text'
             name='description'
             className='input block'
-            defaultValue={activeWorkUnit?.description}
+            defaultValue={chosenWorkUnit?.description}
           />
         </label>
         <label className='block'>
           Details
           <textarea
-            rows={3}
+            rows={4}
             className='input block resize-none'
-            defaultValue={activeWorkUnit?.details}
+            defaultValue={chosenWorkUnit?.details}
             name='details'
           ></textarea>
         </label>
@@ -134,40 +134,46 @@ function WorkUnitEdit({ editId, closeEdit, deleteWorkUnit, addWorkUnit }: WorkUn
           </Listbox.Options>
         </Listbox>
 
-        <div className='relative'>
-          Day
-          <DatePicker date={date} setDate={setDate} />
-        </div>
+        {isFinishedWorkUnit && (
+          <>
+            <div className='relative'>
+              Day
+              <DatePicker date={date} setDate={setDate} />
+            </div>
 
-        <div className='relative'>
-          Start of work
-          <HourPicker
-            timeCaption='Start At'
-            hour={hourStart}
-            setHour={setHourStart}
-            customInput={
-              <ButtonInput
-                icon={<FaHourglassStart className='text-sky-400' />}
-                text={format(new Date(hourStart), DEFAULT.HOUR_FORMAT)}
+            <div className='relative'>
+              Start of work
+              <HourPicker
+                timeCaption='Start At'
+                selected={hourStart}
+                onChange={date => setHourStart(date ?? new Date())}
+                customInput={
+                  <ButtonInput
+                    icon={<FaHourglassStart className='text-sky-400' />}
+                    text={format(new Date(hourStart), DEFAULT.HOUR_FORMAT)}
+                  />
+                }
               />
-            }
-          />
-        </div>
+            </div>
 
-        <div className='relative'>
-          End of work
-          <HourPicker
-            timeCaption='End At'
-            hour={hourEnd}
-            setHour={setHourEnd}
-            customInput={
-              <ButtonInput
-                icon={<FaHourglassEnd className='text-sky-400' />}
-                text={format(new Date(hourEnd), 'hh : mm aa')}
+            <div className='relative'>
+              End of work
+              <HourPicker
+                timeCaption='End At'
+                selected={hourEnd}
+                onChange={date => setHourEnd(date ?? new Date())}
+                minTime={hourStart}
+                maxTime={endOfDay(date)}
+                customInput={
+                  <ButtonInput
+                    icon={<FaHourglassEnd className='text-sky-400' />}
+                    text={format(new Date(hourEnd), 'hh : mm aa')}
+                  />
+                }
               />
-            }
-          />
-        </div>
+            </div>
+          </>
+        )}
       </div>
     </form>
   )
