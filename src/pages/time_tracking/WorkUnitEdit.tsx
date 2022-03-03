@@ -1,5 +1,5 @@
 import { Listbox } from '@headlessui/react'
-import { endOfDay, format } from 'date-fns'
+import { addMinutes, endOfDay, format } from 'date-fns'
 import { Timestamp } from 'firebase/firestore'
 import * as React from 'react'
 import { BsChevronExpand, BsPlusCircle, BsSave2 } from 'react-icons/bs'
@@ -41,6 +41,7 @@ function WorkUnitEdit({ editId, closeEdit, deleteWorkUnit, addWorkUnit }: WorkUn
 
   const selectedTask = getItem(allTasks, taskId)
   const isFinishedWorkUnit = chosenWorkUnit && (chosenWorkUnit.duration ?? 0) > 0
+  const isValidTime = hourEnd.getTime() - hourStart.getTime() >= 0
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -79,7 +80,11 @@ function WorkUnitEdit({ editId, closeEdit, deleteWorkUnit, addWorkUnit }: WorkUn
             Delete
           </button>
         )}
-        <button className='button' type='submit'>
+        <button
+          className='button disabled:text-slate-600 disabled:hover:bg-transparent'
+          type='submit'
+          disabled={!isValidTime}
+        >
           <BsSave2 />
           Save
         </button>
@@ -131,7 +136,7 @@ function WorkUnitEdit({ editId, closeEdit, deleteWorkUnit, addWorkUnit }: WorkUn
           </Listbox.Options>
         </Listbox>
 
-        {isFinishedWorkUnit && (
+        {(isFinishedWorkUnit || !editId) && (
           <>
             <div className='relative'>
               Day
@@ -155,11 +160,12 @@ function WorkUnitEdit({ editId, closeEdit, deleteWorkUnit, addWorkUnit }: WorkUn
 
             <div className='relative'>
               End of work
+              {!isValidTime && <span className='text-red-400'>: Pick a later timestamp</span>}
               <HourPicker
                 timeCaption='End At'
                 selected={hourEnd}
                 onChange={date => setHourEnd(date ?? new Date())}
-                minTime={hourStart}
+                minTime={addMinutes(hourStart, 1)}
                 maxTime={endOfDay(date)}
                 customInput={
                   <ButtonInput
