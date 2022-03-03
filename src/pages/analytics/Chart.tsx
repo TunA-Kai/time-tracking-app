@@ -2,9 +2,7 @@ import { ChartData, ChartDataset } from 'chart.js'
 import { eachDayOfInterval, endOfMonth, format, startOfMonth } from 'date-fns'
 import React from 'react'
 import { Bar, Line } from 'react-chartjs-2'
-import { useTagContext } from '../../contexts/tagContext/tagContext'
-import { useTaskContext } from '../../contexts/taskContext/taskContext'
-import { useWorkUnitContext } from '../../contexts/workUnitContext/workUnitContext'
+import { getItem, useDataContext } from '../../contexts/dataContext/dataContext'
 import { DateString, TTag, TWorkUnit } from '../../types'
 import { barOptions, lineOptions } from '../../utils/constants/chartOption'
 import { colorOption } from '../../utils/constants/colorOptions'
@@ -18,9 +16,7 @@ interface ChartProps {
 }
 
 function Chart({ month, chartDataType, chartType }: ChartProps) {
-  const { groupedWorkUnits } = useWorkUnitContext()
-  const { tasks, getTask } = useTaskContext()
-  const { tags } = useTagContext()
+  const { tasks, tags, groupedWorkUnits } = useDataContext()
 
   const dayInterval = React.useMemo(
     () => eachDayOfInterval({ start: startOfMonth(month), end: endOfMonth(month) }),
@@ -69,7 +65,7 @@ function Chart({ month, chartDataType, chartType }: ChartProps) {
       Object.keys(groupedWorkUnits).reduce((acc, key) => {
         acc[key] = groupedWorkUnits[key]
           .map(wku => {
-            const tagIds = getTask(wku.taskId)?.tagIds
+            const tagIds = getItem(tasks, wku.taskId)?.tagIds
             let temp: Record<TTag['id'], number> = {}
             tagIds && tagIds.forEach(t => (temp[t] = (wku?.duration ?? 0) / tagIds.length))
             return temp
@@ -82,7 +78,7 @@ function Chart({ month, chartDataType, chartType }: ChartProps) {
           }, {} as Record<TTag['id'], number>)
         return acc
       }, {} as Record<DateString, Record<TTag['id'], number>>),
-    [groupedWorkUnits],
+    [groupedWorkUnits, tasks],
   )
 
   const tagDatasets = React.useMemo(

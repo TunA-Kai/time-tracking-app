@@ -2,15 +2,13 @@ import * as React from 'react'
 import { FaPen } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { ActionBar, LabelTag } from '../../components'
-import { useTagContext } from '../../contexts/tagContext/tagContext'
-import { useTaskContext } from '../../contexts/taskContext/taskContext'
+import { useDataContext } from '../../contexts/dataContext/dataContext'
 import { TSortOption } from '../../types'
 import { sortList } from '../../utils/helpers/sortList'
 import { useLocalStorage } from '../../utils/hooks/useLocalStorage'
 
 function TagsHome() {
-  const { tags } = useTagContext()
-  const { tasks } = useTaskContext()
+  const { tags, tasks } = useDataContext()
   const [sortType, setSortType] = useLocalStorage<TSortOption>('tag_sort_type', 'Newest first')
   const [searchQuery, setSearchQuery] = React.useState<string>('')
   const sortTags = sortList(tags, sortType)

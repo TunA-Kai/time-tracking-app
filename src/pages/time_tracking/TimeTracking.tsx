@@ -7,8 +7,8 @@ import { FaPause, FaPlay, FaStop } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import { PageLayout } from '../../components'
-import { useTaskContext } from '../../contexts/taskContext/taskContext'
-import { useWorkUnitContext } from '../../contexts/workUnitContext/workUnitContext'
+import { getItem, useDataContext } from '../../contexts/dataContext/dataContext'
+import { useWorkDetailsContext } from '../../contexts/workDetailsContext/workDetailsContext'
 import { db } from '../../firebaseConfig'
 import { FireStoreCollection, TWorkUnit } from '../../types'
 import { DEFAULT } from '../../utils/constants/defaultValue'
@@ -17,9 +17,8 @@ import NormalDateBlock from './NormalDateBlock'
 import WorkUnitEdit from './WorkUnitEdit'
 
 function TimeTracking() {
-  const { tasks } = useTaskContext()
-  const { workUnits, setWorkUnits, groupedWorkUnits, timerRef, workStatus, setWorkStatus } =
-    useWorkUnitContext()
+  const { tasks, workUnits, dispatch, groupedWorkUnits } = useDataContext()
+  const { durationTimer, workStatus, setWorkStatus } = useWorkDetailsContext()
   const [edit, dispatchEdit] = React.useReducer(
     (
       state: { isEditing: boolean; editId?: string },
@@ -68,8 +67,8 @@ function TimeTracking() {
       end: Timestamp.now(),
     }
     setWorkStatus('working')
-    timerRef.current = 0
-    setWorkUnits([newWorkUnit, ...workUnits])
+    durationTimer.current = 0
+    dispatch({ type: 'ADD_ITEM', newItem: newWorkUnit, itemType: 'workUnits' })
   }
 
   function handlePauseWork() {
@@ -81,26 +80,25 @@ function TimeTracking() {
   }
 
   function handleStopWork() {
-    const newWorkUnit = { ...workUnits[0], end: Timestamp.now(), duration: timerRef.current }
+    const newWorkUnit = { ...workUnits[0], end: Timestamp.now(), duration: durationTimer.current }
     setWorkStatus('idle')
     setDoc(doc(db, FireStoreCollection.WORKUNIT, newWorkUnit.id), newWorkUnit)
-    setWorkUnits([newWorkUnit, ...workUnits.slice(1)])
+    dispatch({ type: 'UPDATE_ITEM', newItem: newWorkUnit, itemType: 'workUnits' })
   }
 
   // WorkUnitEdit block function
   function addWorkUnit(newWorkUnit: TWorkUnit) {
-    const editWku = workUnits.find(w => w.id === newWorkUnit.id)
-    const newWorkUnits = editWku
-      ? workUnits.map(w => (w.id === newWorkUnit.id ? newWorkUnit : w))
-      : [newWorkUnit, ...workUnits]
+    const editWku = getItem(workUnits, newWorkUnit.id)
+    editWku
+      ? dispatch({ type: 'UPDATE_ITEM', newItem: newWorkUnit, itemType: 'workUnits' })
+      : dispatch({ type: 'ADD_ITEM', newItem: newWorkUnit, itemType: 'workUnits' })
     closeEdit()
     setDoc(doc(db, FireStoreCollection.WORKUNIT, newWorkUnit.id), newWorkUnit)
-    setWorkUnits(newWorkUnits)
   }
 
   function deleteWorkUnit(wkuId: string) {
     closeEdit()
-    setWorkUnits(workUnits.filter(w => w.id !== wkuId))
+    dispatch({ type: 'DELETE_ITEM', itemId: wkuId, itemType: 'workUnits' })
     deleteDoc(doc(db, FireStoreCollection.WORKUNIT, wkuId))
   }
 
@@ -178,7 +176,7 @@ function TimeTracking() {
                     workUnits={groupedWorkUnits[dateKeys[0]]}
                     isWorking={isWorking}
                     isIdle={isIdle}
-                    timerRef={timerRef}
+                    timerRef={durationTimer}
                     toggleEdit={toggleEdit}
                     editId={editId}
                   />

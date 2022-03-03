@@ -8,11 +8,9 @@ import { VscChromeClose } from 'react-icons/vsc'
 import { Link } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import { ButtonInput } from '../../components'
-import { useTaskContext } from '../../contexts/taskContext/taskContext'
-import { useWorkUnitContext } from '../../contexts/workUnitContext/workUnitContext'
+import { getItem, useDataContext } from '../../contexts/dataContext/dataContext'
 import { TTask, TWorkUnit } from '../../types'
 import { DEFAULT } from '../../utils/constants/defaultValue'
-
 import DatePicker from './DatePicker'
 import HourPicker from './HourPicker'
 
@@ -28,8 +26,7 @@ function getNow() {
 }
 
 function WorkUnitEdit({ editId, closeEdit, deleteWorkUnit, addWorkUnit }: WorkUnitEditProps) {
-  const { tasks: allTasks, getTask } = useTaskContext()
-  const { workUnits } = useWorkUnitContext()
+  const { tasks: allTasks, workUnits } = useDataContext()
 
   const chosenWorkUnit = workUnits.find(w => w.id === editId)
 
@@ -42,7 +39,7 @@ function WorkUnitEdit({ editId, closeEdit, deleteWorkUnit, addWorkUnit }: WorkUn
   const [hourStart, setHourStart] = React.useState<Date>(chosenWorkUnit?.start.toDate() ?? getNow)
   const [hourEnd, setHourEnd] = React.useState<Date>(chosenWorkUnit?.end.toDate() ?? getNow)
 
-  const selectedTask = getTask(taskId)
+  const selectedTask = getItem(allTasks, taskId)
   const isFinishedWorkUnit = chosenWorkUnit && (chosenWorkUnit.duration ?? 0) > 0
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {

@@ -2,8 +2,7 @@ import { Disclosure } from '@headlessui/react'
 import { AiOutlineTag } from 'react-icons/ai'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import { LabelTag } from '../../components'
-import { useTagContext } from '../../contexts/tagContext/tagContext'
-import { useTaskContext } from '../../contexts/taskContext/taskContext'
+import { useDataContext } from '../../contexts/dataContext/dataContext'
 import { TWorkUnit } from '../../types'
 import { secondToHour } from '../../utils/helpers/secondToHour'
 
@@ -15,8 +14,7 @@ interface NormalDateBlockProps {
 }
 
 function NormalDateBlock({ date, workUnits, toggleEdit, editId }: NormalDateBlockProps) {
-  const { tasks } = useTaskContext()
-  const { tags } = useTagContext()
+  const { tasks, tags } = useDataContext()
   const totalWorkDuration = secondToHour(workUnits.reduce((a, b) => a + (b.duration ?? 0), 0))
   return (
     <Disclosure as='li'>

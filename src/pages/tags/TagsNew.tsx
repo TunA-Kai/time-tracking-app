@@ -5,7 +5,7 @@ import { FaTrash } from 'react-icons/fa'
 import { Link, useParams } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import { ColorPicker } from '../../components'
-import { useTagContext } from '../../contexts/tagContext/tagContext'
+import { getItem, useDataContext } from '../../contexts/dataContext/dataContext'
 import { db } from '../../firebaseConfig'
 import { FireStoreCollection, ItemColor } from '../../types'
 import { DEFAULT } from '../../utils/constants/defaultValue'
@@ -16,12 +16,12 @@ interface TagsNewProps {
 
 function TagsNew({ edit }: TagsNewProps) {
   const { tagId } = useParams()
-  const { getTag, updateTag, deleteTag, addTag } = useTagContext()
+  const { dispatch, tags } = useDataContext()
   const {
     color: currentColor = DEFAULT.TAG_COLOR,
     name: currentName = DEFAULT.TAG_NAME,
     details: currentDetail = '',
-  } = tagId ? getTag(tagId) ?? {} : {}
+  } = tagId ? getItem(tags, tagId) ?? {} : {}
   const [color, setColor] = React.useState<ItemColor>(currentColor)
   const [tagName, setTagName] = React.useState<string>(currentName)
   const [tagDetail, setTagDetail] = React.useState<string>(currentDetail)
@@ -35,17 +35,19 @@ function TagsNew({ edit }: TagsNewProps) {
       details: tagDetail,
     }
     newTag.id && setDoc(doc(db, FireStoreCollection.TAGS, newTag.id), newTag)
-    edit ? updateTag(newTag) : addTag(newTag)
+    edit
+      ? dispatch({ type: 'UPDATE_ITEM', newItem: newTag, itemType: 'tags' })
+      : dispatch({ type: 'ADD_ITEM', newItem: newTag, itemType: 'tags' })
   }
 
   function handleDelete() {
     if (tagId) {
       deleteDoc(doc(db, FireStoreCollection.TAGS, tagId))
-      deleteTag(tagId)
+      dispatch({ type: 'DELETE_ITEM', itemId: tagId, itemType: 'tags' })
     }
   }
 
-  if (tagId && !getTag(tagId)) return <h2>There is no tag with ID: {tagId}</h2>
+  if (tagId && !getItem(tags, tagId)) return <h2>There is no tag with ID: {tagId}</h2>
 
   return (
     <form className='max-w-md space-y-4'>

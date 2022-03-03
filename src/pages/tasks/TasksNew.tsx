@@ -5,9 +5,7 @@ import { FaTrash } from 'react-icons/fa'
 import { useNavigate, useParams } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import { ColorPicker, ItemPicker } from '../../components'
-import { useTagContext } from '../../contexts/tagContext/tagContext'
-import { useTaskContext } from '../../contexts/taskContext/taskContext'
-import { useWorkUnitContext } from '../../contexts/workUnitContext/workUnitContext'
+import { getItem, useDataContext } from '../../contexts/dataContext/dataContext'
 import { db } from '../../firebaseConfig'
 import { FireStoreCollection, ItemColor } from '../../types'
 import { DEFAULT } from '../../utils/constants/defaultValue'
@@ -17,16 +15,14 @@ interface TasksNewProps {
 }
 
 function TasksNew({ edit }: TasksNewProps) {
-  const { tags } = useTagContext()
   const { taskId } = useParams()
-  const { getTask, updateTask, addTask, deleteTask } = useTaskContext()
-  const { workUnits, setWorkUnits } = useWorkUnitContext()
+  const { dispatch, tags, tasks, workUnits } = useDataContext()
   const {
     color: currentColor = DEFAULT.TASK_COLOR,
     name: currentName = DEFAULT.TASK_NAME,
     details: currentDetail = '',
     tagIds: currentTags = [],
-  } = taskId ? getTask(taskId) ?? {} : {}
+  } = taskId ? getItem(tasks, taskId) ?? {} : {}
   const [color, setColor] = React.useState<ItemColor>(currentColor)
   const [taskName, setTaskName] = React.useState<string>(currentName)
   const [taskDetail, setTaskDetail] = React.useState<string>(currentDetail)
@@ -44,17 +40,23 @@ function TasksNew({ edit }: TasksNewProps) {
     }
 
     setDoc(doc(db, FireStoreCollection.TASKS, newTask.id), newTask)
-    edit ? updateTask(newTask) : addTask(newTask)
+    edit
+      ? dispatch({ type: 'UPDATE_ITEM', newItem: newTask, itemType: 'tasks' })
+      : dispatch({ type: 'ADD_ITEM', newItem: newTask, itemType: 'tasks' })
     navigate('..')
   }
 
   function handleDelete() {
     if (taskId) {
       deleteDoc(doc(db, FireStoreCollection.TASKS, taskId))
-      deleteTask(taskId)
+      dispatch({ type: 'DELETE_ITEM', itemId: taskId, itemType: 'tasks' })
 
       // ?? needed ?? delete all related Work Unit to this task
-      setWorkUnits(workUnits.filter(w => w.taskId !== taskId))
+      dispatch({
+        type: 'UPDATE_COLLECTION',
+        collectionType: 'workUnits',
+        newCollection: workUnits.filter(w => w.taskId !== taskId),
+      })
       workUnits.forEach(
         w => w.taskId === taskId && deleteDoc(doc(db, FireStoreCollection.WORKUNIT, w.id)),
       )
@@ -71,7 +73,7 @@ function TasksNew({ edit }: TasksNewProps) {
     setTagIds(tagIds.filter(tagId => tagId !== id))
   }
 
-  if (taskId && !getTask(taskId)) return <h2>There is no task with ID: {taskId}</h2>
+  if (taskId && !getItem(tasks, taskId)) return <h2>There is no task with ID: {taskId}</h2>
 
   return (
     <form className='max-w-md space-y-4'>
