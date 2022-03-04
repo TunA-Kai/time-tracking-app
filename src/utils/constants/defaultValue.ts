@@ -8,4 +8,7 @@ export enum DEFAULT {
 
   DATE_FORMAT = 'EEE, LL/dd/yyyy',
   HOUR_FORMAT = 'hh : mm aa',
+
+  /** MUST BE 500 */
+  DASH_ARRAY = 500,
 }

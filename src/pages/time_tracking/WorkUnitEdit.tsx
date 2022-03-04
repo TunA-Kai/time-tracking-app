@@ -116,7 +116,7 @@ function WorkUnitEdit({ editId, closeEdit, deleteWorkUnit, addWorkUnit }: WorkUn
             {selectedTask?.name}
             <BsChevronExpand className='ml-auto' />
           </Listbox.Button>
-          <Listbox.Options className='absolute top-0 left-0 z-50 w-max -translate-y-[85%] rounded-md border-2 border-sky-500 bg-slate-800 p-2'>
+          <Listbox.Options className='scrollbar absolute top-0 left-0 z-50 h-48 w-max -translate-y-[85%] overflow-y-auto rounded-md border-2 border-sky-500 bg-slate-800 p-2'>
             {allTasks.map(t => (
               <Listbox.Option value={t.id} key={t.id}>
                 {({ selected }) => (
@@ -128,7 +128,7 @@ function WorkUnitEdit({ editId, closeEdit, deleteWorkUnit, addWorkUnit }: WorkUn
               </Listbox.Option>
             ))}
             <li>
-              <Link to={`/tasks/new`} className='button gap-2 px-1'>
+              <Link to={`/tasks/new`} className='button w-full gap-2 px-1'>
                 <BsPlusCircle />
                 <span>Create new task</span>
               </Link>

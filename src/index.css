@@ -148,6 +148,18 @@
 .react-datepicker-time__header {
   @apply ml-2.5 border-2 py-1 text-base font-semibold text-gray-800;
 }
+
+/* -------------------------------------------------------------------------- */
+/*                           HEADER: POMODORO CLOCK                           */
+/* -------------------------------------------------------------------------- */
+.svg-loader_grow {
+  stroke-miterlimit: 10;
+  stroke-dasharray: 500;
+  stroke-dashoffset: 0;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
 /* -------------------------------------------------------------------------- */
 /*                         HEADER: TAILWIND COMPONENTS                        */
 /* -------------------------------------------------------------------------- */
@@ -159,6 +171,10 @@
 
   .button {
     @apply inline-flex items-center gap-1 rounded-md p-2 hover:bg-slate-700;
+  }
+
+  .circle {
+    @apply relative stroke-sky-400 stroke-[6] duration-1000 ease-linear;
   }
 }
 
