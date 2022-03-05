@@ -1,25 +1,28 @@
 import { Popover } from '@headlessui/react'
 import * as React from 'react'
 import { BsQuestionLg } from 'react-icons/bs'
-import { VscPlay, VscSettings } from 'react-icons/vsc'
+import { VscSettings } from 'react-icons/vsc'
 import { PageLayout } from '../../components'
+import { useWorkDetailsContext } from '../../contexts/workDetailsContext/workDetailsContext'
 import useCounter from '../../utils/hooks/useCounter'
 import ConfigTimerButton from './ConfigTimerButton'
 import ConfigTimerSwitch from './ConfigTimerSwitch'
-import Timer from './Timer'
+import NewTimer from './NewTimer'
 
 interface PomodoroProps {}
 
 function Pomodoro({}: PomodoroProps) {
+  const { pomodoroStatus } = useWorkDetailsContext()
   const [pomodoroCount, incPomodoroCount, decpomodoroCount] = useCounter({
     initialValue: 4,
     maxValue: 8,
-    minValue: 1,
+    minValue: 2,
   })
   const [pomodoroDuration, incPomodoroDuration, decPomodoroDuration] = useCounter({
     initialValue: 25,
     maxValue: 50,
-    minValue: 1,
+    minValue: 5,
+    step: 5,
   })
   const [breakDuration, incBreakDuration, decBreakDuration] = useCounter({
     initialValue: 5,
@@ -33,21 +36,12 @@ function Pomodoro({}: PomodoroProps) {
   return (
     <PageLayout title='Pomodoro'>
       <div className='flex h-[calc(100vh-theme(space.24))] flex-col gap-4'>
-        <div className='grid grow place-items-center'>
-          <Timer />
-          <button className='-mt-20 rounded-full bg-slate-800 p-2 hover:bg-slate-700'>
-            <VscPlay className='h-7 w-7 translate-x-[2px]' />
-          </button>
-          <div className='-mt-4 flex flex-wrap justify-center gap-2'>
-            <div className='h-1 w-16 rounded-sm bg-slate-700'></div>
-            <div className='h-1 w-4 rounded-sm bg-slate-700'></div>
-            <div className='h-1 w-16 rounded-sm bg-slate-700'></div>
-            <div className='h-1 w-4 rounded-sm bg-slate-700'></div>
-            <div className='h-1 w-16 rounded-sm bg-slate-700'></div>
-            <div className='h-1 w-4 rounded-sm bg-slate-700'></div>
-            <div className='h-1 w-16 rounded-sm bg-slate-700'></div>
-          </div>
-        </div>
+        <NewTimer
+          key={`${pomodoroDuration}-${breakDuration}`}
+          pomodoroCount={pomodoroCount}
+          initialPomodoroDuration={pomodoroDuration * 60}
+          initialBreakDuration={breakDuration * 60}
+        />
 
         <div className='flex justify-between'>
           <a
@@ -59,7 +53,10 @@ function Pomodoro({}: PomodoroProps) {
             <BsQuestionLg className='h-5 w-5' />
           </a>
           <Popover className='relative'>
-            <Popover.Button className='button border border-slate-600'>
+            <Popover.Button
+              className='button border border-slate-600 disabled:border-slate-900 disabled:text-slate-600 disabled:hover:bg-slate-900'
+              disabled={pomodoroStatus !== 'idle'}
+            >
               <VscSettings className='h-5 w-5' />
             </Popover.Button>
             <Popover.Panel

@@ -3,11 +3,14 @@ import type { SetValue } from '../../types'
 import { useInterval } from '../../utils/hooks/useInterval'
 
 type TWorkStatus = 'idle' | 'working' | 'pause'
+type TPomodoroStatus = 'idle' | 'working' | 'pause' | 'relaxing'
 
 interface WorkDetailsContextType {
   durationTimer: React.MutableRefObject<number>
   workStatus: TWorkStatus
   setWorkStatus: SetValue<TWorkStatus>
+  pomodoroStatus: TPomodoroStatus
+  setPomodoroStatus: SetValue<TPomodoroStatus>
 }
 
 const WorkDetailsContext = React.createContext<WorkDetailsContextType | undefined>(undefined)
@@ -16,12 +19,13 @@ WorkDetailsContext.displayName = 'WorkDetailsContext'
 function WorkDetailsProvider({ children }: { children: React.ReactNode }) {
   const durationTimer = React.useRef(0)
   const [workStatus, setWorkStatus] = React.useState<TWorkStatus>('idle')
+  const [pomodoroStatus, setPomodoroStatus] = React.useState<TPomodoroStatus>('idle')
 
   useInterval(() => durationTimer.current++, workStatus === 'working' ? 1000 : null)
 
   const contextValue = React.useMemo(
-    () => ({ workStatus, setWorkStatus, durationTimer }),
-    [workStatus],
+    () => ({ workStatus, setWorkStatus, durationTimer, pomodoroStatus, setPomodoroStatus }),
+    [pomodoroStatus, workStatus],
   )
 
   return <WorkDetailsContext.Provider value={contextValue}>{children}</WorkDetailsContext.Provider>

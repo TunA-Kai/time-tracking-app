@@ -21,6 +21,7 @@ module.exports = {
       ],
       serif: ['ui-serif', 'Georgia', 'Cambria', '"Times New Roman"', 'Times', 'serif'],
       mono: [
+        '"IBM Plex Mono"',
         'ui-monospace',
         'SFMono-Regular',
         'Menlo',
