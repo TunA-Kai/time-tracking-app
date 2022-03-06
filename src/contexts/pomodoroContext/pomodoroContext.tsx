@@ -2,6 +2,9 @@ import * as React from 'react'
 import { SetValue } from '../../types'
 import { LSKey } from '../../utils/constants/localStorageKey'
 import { useInterval } from '../../utils/hooks/useInterval'
+import notification from '../../assets/pomodoro_notification.mp3'
+
+const noti = new Audio(notification)
 
 type TPomodoroStatus = 'idle' | 'working' | 'pause' | 'relaxing'
 
@@ -20,6 +23,7 @@ PomodoroContext.displayName = 'PomodoroContext'
 function PomodoroProvider({ children }: { children: React.ReactNode }) {
   const [pomodoroStatus, setPomodoroStatus] = React.useState<TPomodoroStatus>('idle')
   const [lineIndex, setLineIndex] = React.useState<number>(0)
+  const pomodoroTimerRef = React.useRef(NaN)
 
   const pomodoroDuration = Number(window.localStorage.getItem(LSKey.POMODORO_DURATION) ?? 25)
   const breakDuration = Number(window.localStorage.getItem(LSKey.BREAK_DURATION) ?? 5)
@@ -27,8 +31,6 @@ function PomodoroProvider({ children }: { children: React.ReactNode }) {
   const auto = window.localStorage.getItem(LSKey.POMODORO_AUTO) === 'true'
   const sound = window.localStorage.getItem(LSKey.POMODORO_SOUND) === 'true'
   const sync = window.localStorage.getItem(LSKey.POMODORO_SYNC) === 'true'
-
-  const pomodoroTimerRef = React.useRef(NaN)
 
   const isWorking = pomodoroStatus === 'working'
   const isRelaxing = pomodoroStatus === 'relaxing'
@@ -43,6 +45,7 @@ function PomodoroProvider({ children }: { children: React.ReactNode }) {
         // pomodoroTimerRef.current = isWorking ? breakDuration : pomodoroDuration
         setPomodoroStatus('idle')
         setLineIndex(nextLineIndex === pomodoroCount * 2 - 1 ? 0 : nextLineIndex)
+        sound && noti.play()
       } else pomodoroTimerRef.current = newSecond
     },
     isWorking || isRelaxing ? 1000 : null,
