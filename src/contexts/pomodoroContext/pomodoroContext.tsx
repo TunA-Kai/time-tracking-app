@@ -42,8 +42,8 @@ function PomodoroProvider({ children }: { children: React.ReactNode }) {
       // console.log(newSecond)
       if (newSecond < 0) {
         const nextLineIndex = lineIndex + 1
-        // pomodoroTimerRef.current = isWorking ? breakDuration : pomodoroDuration
-        setPomodoroStatus('idle')
+        pomodoroTimerRef.current = isWorking ? breakDuration * 60 : pomodoroDuration * 60
+        setPomodoroStatus(auto ? (isWorking ? 'relaxing' : 'working') : 'idle')
         setLineIndex(nextLineIndex === pomodoroCount * 2 - 1 ? 0 : nextLineIndex)
         sound && noti.play()
       } else pomodoroTimerRef.current = newSecond

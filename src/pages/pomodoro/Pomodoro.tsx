@@ -106,7 +106,7 @@ function Pomodoro({}: PomodoroProps) {
               />
               <ConfigTimerSwitch label='Notification sound' checked={sound} onChange={setSound} />
               <ConfigTimerSwitch
-                label='Sync with time tracking'
+                label='Sync with time tracking (not available)'
                 checked={sync}
                 onChange={setSync}
               />
