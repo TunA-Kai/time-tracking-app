@@ -3,8 +3,10 @@ import * as React from 'react'
 import { BsQuestionLg } from 'react-icons/bs'
 import { VscSettings } from 'react-icons/vsc'
 import { PageLayout } from '../../components'
-import { useWorkDetailsContext } from '../../contexts/workDetailsContext/workDetailsContext'
+import { usePomodoroContext } from '../../contexts/pomodoroContext/pomodoroContext'
+import { LSKey } from '../../utils/constants/localStorageKey'
 import useCounter from '../../utils/hooks/useCounter'
+import { useLocalStorage } from '../../utils/hooks/useLocalStorage'
 import ConfigTimerButton from './ConfigTimerButton'
 import ConfigTimerSwitch from './ConfigTimerSwitch'
 import NewTimer from './NewTimer'
@@ -12,32 +14,42 @@ import NewTimer from './NewTimer'
 interface PomodoroProps {}
 
 function Pomodoro({}: PomodoroProps) {
-  const { pomodoroStatus } = useWorkDetailsContext()
-  const [pomodoroCount, incPomodoroCount, decpomodoroCount] = useCounter({
-    initialValue: 4,
-    maxValue: 8,
-    minValue: 2,
-  })
+  const { pomodoroStatus, nextStatus, pomodoroTimerRef } = usePomodoroContext()
   const [pomodoroDuration, incPomodoroDuration, decPomodoroDuration] = useCounter({
+    lsKey: LSKey.POMODORO_DURATION,
     initialValue: 25,
     maxValue: 50,
     minValue: 5,
     step: 5,
   })
   const [breakDuration, incBreakDuration, decBreakDuration] = useCounter({
+    lsKey: LSKey.BREAK_DURATION,
     initialValue: 5,
     maxValue: 15,
     minValue: 1,
   })
-  const [auto, setAuto] = React.useState<boolean>(false)
-  const [sound, setSound] = React.useState<boolean>(false)
-  const [sync, setSync] = React.useState<boolean>(false)
+  const [pomodoroCount, incPomodoroCount, decpomodoroCount] = useCounter({
+    lsKey: LSKey.POMODORO_COUNT,
+    initialValue: 4,
+    maxValue: 8,
+    minValue: 2,
+  })
+  const [auto, setAuto] = useLocalStorage(LSKey.POMODORO_AUTO, false)
+  const [sound, setSound] = useLocalStorage(LSKey.POMODORO_SOUND, false)
+  const [sync, setSync] = useLocalStorage(LSKey.POMODORO_SYNC, false)
+
+  // reset timerRef when change duration setting/ finish a section
+  // modify ref when rendering is not a good idea
+  // https://beta.reactjs.org/learn/referencing-values-with-refs#best-practices-for-refs
+  if (pomodoroStatus === 'idle') {
+    pomodoroTimerRef.current = (nextStatus === 'working' ? pomodoroDuration : breakDuration) * 60
+  }
 
   return (
     <PageLayout title='Pomodoro'>
       <div className='flex h-[calc(100vh-theme(space.24))] flex-col gap-4'>
         <NewTimer
-          key={`${pomodoroDuration}-${breakDuration}`}
+          key={`${pomodoroDuration}-${breakDuration}-${pomodoroStatus}`}
           pomodoroCount={pomodoroCount}
           initialPomodoroDuration={pomodoroDuration * 60}
           initialBreakDuration={breakDuration * 60}

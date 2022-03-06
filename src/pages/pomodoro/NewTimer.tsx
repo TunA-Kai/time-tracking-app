@@ -1,7 +1,7 @@
 import { Circle, Line } from 'rc-progress'
 import * as React from 'react'
-import { VscPlay, VscDebugStop, VscDebugPause } from 'react-icons/vsc'
-import { useWorkDetailsContext } from '../../contexts/workDetailsContext/workDetailsContext'
+import { VscDebugPause, VscDebugStop, VscPlay } from 'react-icons/vsc'
+import { usePomodoroContext } from '../../contexts/pomodoroContext/pomodoroContext'
 import { useInterval } from '../../utils/hooks/useInterval'
 
 interface NewTimerProps {
@@ -13,14 +13,20 @@ interface NewTimerProps {
 }
 
 function NewTimer({ pomodoroCount, initialPomodoroDuration, initialBreakDuration }: NewTimerProps) {
-  const { pomodoroStatus, setPomodoroStatus } = useWorkDetailsContext()
+  const {
+    pomodoroStatus,
+    setPomodoroStatus,
+    pomodoroTimerRef,
+    lineIndex,
+    setLineIndex,
+    nextStatus,
+  } = usePomodoroContext()
 
-  const [second, setSecond] = React.useState<number>(initialPomodoroDuration)
-  const [lineIndex, setLineIndex] = React.useState<number>(0)
+  const [second, setSecond] = React.useState<number>(pomodoroTimerRef.current)
 
   const isWorking = pomodoroStatus === 'working'
   const isRelaxing = pomodoroStatus === 'relaxing'
-  const nextStatus: typeof pomodoroStatus = lineIndex % 2 === 0 ? 'working' : 'relaxing'
+
   const lineArray = React.useMemo(
     () => new Array(pomodoroCount * 2 - 1).fill(undefined),
     [pomodoroCount],
@@ -30,10 +36,7 @@ function NewTimer({ pomodoroCount, initialPomodoroDuration, initialBreakDuration
     () => {
       const newSecond = second - 1
       if (newSecond < 0) {
-        const nextLineIndex = lineIndex + 1
         setSecond(isWorking ? initialBreakDuration : initialPomodoroDuration)
-        setPomodoroStatus('idle')
-        setLineIndex(nextLineIndex === lineArray.length ? 0 : nextLineIndex)
       } else setSecond(newSecond)
     },
     isWorking || isRelaxing ? 1000 : null,
@@ -49,6 +52,7 @@ function NewTimer({ pomodoroCount, initialPomodoroDuration, initialBreakDuration
     setPomodoroStatus('idle')
     setSecond(initialPomodoroDuration)
     setLineIndex(0)
+    pomodoroTimerRef.current = initialPomodoroDuration
   }
 
   return (

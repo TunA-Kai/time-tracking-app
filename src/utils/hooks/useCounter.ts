@@ -32,7 +32,7 @@ function useCounter(
 
   const reset = () => setValue(initialValue)
 
-  return { value, increment, decrement, reset, setValue }
+  return [value, increment, decrement, reset, setValue] as const
 }
 
 export default useCounter
