@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import { PageWrapper, SideBar } from '..'
 import { DataProvider } from '../../contexts/dataContext/dataContext'
+import { PomodoroProvider } from '../../contexts/pomodoroContext/pomodoroContext'
 import { WorkDetailsProvider } from '../../contexts/workDetailsContext/workDetailsContext'
 
 function AppLayout() {
@@ -10,13 +11,15 @@ function AppLayout() {
         <SideBar />
       </aside>
       <main className='h-full w-full grow bg-slate-900 p-4 pb-0'>
-        <DataProvider>
-          <PageWrapper>
-            <WorkDetailsProvider>
-              <Outlet />
-            </WorkDetailsProvider>
-          </PageWrapper>
-        </DataProvider>
+        <PomodoroProvider>
+          <DataProvider>
+            <PageWrapper>
+              <WorkDetailsProvider>
+                <Outlet />
+              </WorkDetailsProvider>
+            </PageWrapper>
+          </DataProvider>
+        </PomodoroProvider>
       </main>
     </div>
   )

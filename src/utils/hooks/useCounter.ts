@@ -1,40 +1,38 @@
-import * as React from 'react'
+import { useLocalStorage } from './useLocalStorage'
 
 interface Options {
   initialValue?: number
   maxValue?: number
   minValue?: number
   step?: number
+  lsKey: string
 }
 
 /**
  * @returns Tuple [count, increment, decrement, reset, setCount]
  */
-function useCounter({
-  initialValue = 0,
-  maxValue = Infinity,
-  minValue = -Infinity,
-  step = 1,
-}: Options = {}) {
-  const [count, setCount] = React.useState(initialValue)
+function useCounter(
+  { lsKey, initialValue = 0, maxValue = Infinity, minValue = -Infinity, step = 1 } = {} as Options,
+) {
+  const [value, setValue] = useLocalStorage(lsKey, initialValue)
 
   function increment() {
-    setCount(x => {
+    setValue(x => {
       const newValue = x + step
       return newValue > maxValue ? maxValue : newValue
     })
   }
 
   function decrement() {
-    setCount(x => {
+    setValue(x => {
       const newValue = x - step
       return newValue < minValue ? minValue : newValue
     })
   }
 
-  const reset = () => setCount(initialValue)
+  const reset = () => setValue(initialValue)
 
-  return [count, increment, decrement, reset, setCount] as const
+  return { value, increment, decrement, reset, setValue }
 }
 
 export default useCounter
