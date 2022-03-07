@@ -6,7 +6,7 @@ interface AboutProps {}
 function About({}: AboutProps) {
   return (
     <PageLayout title='About'>
-      <div className='scrollbar  h-[calc(100vh-theme(space.24))] overflow-y-auto'>
+      <div className='scrollbar h-[calc(100vh-theme(space.24))] overflow-y-auto'>
         <div className='mx-auto flex max-w-xl flex-col gap-4 '>
           <Question
             defaultOpen
