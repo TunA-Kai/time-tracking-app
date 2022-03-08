@@ -14,7 +14,7 @@ function Analytics() {
 
   return (
     <PageLayout title='Analytics'>
-      <div className='mx-auto -mt-5 mb-5 flex max-w-xl gap-4'>
+      <div className='mx-auto -mt-5 mb-5 flex max-w-xl justify-center gap-4'>
         <div>
           <button
             className={`button w-20 justify-center rounded-r-none border p-1 ${
@@ -35,6 +35,7 @@ function Analytics() {
             Bars
           </button>
         </div>
+
         <div>
           <button
             className={`button w-20 justify-center rounded-r-none border p-1 ${

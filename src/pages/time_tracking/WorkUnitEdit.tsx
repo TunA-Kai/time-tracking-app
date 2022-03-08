@@ -90,7 +90,7 @@ function WorkUnitEdit({ editId, closeEdit, deleteWorkUnit, addWorkUnit }: WorkUn
         </button>
       </div>
 
-      <div className='scrollbar h-[28rem] max-w-sm space-y-4 overflow-y-auto'>
+      <div className='scrollbar h-[calc(100vh-theme(space.32))] max-w-sm space-y-4 overflow-y-auto'>
         <label className='block'>
           Description
           <input

@@ -26,7 +26,8 @@ function TasksHome() {
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />
-      <ul className='mt-4'>
+
+      <ul className='scrollbar mt-4 h-[calc(100vh-theme(space.36))] overflow-y-auto'>
         {searchedTasks.map(t => (
           <li key={t.id}>
             <Link to={`edit/${t.id}`} className='button w-full gap-2'>

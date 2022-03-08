@@ -84,6 +84,7 @@ function TimeTracking() {
     setWorkStatus('idle')
     setDoc(doc(db, FireStoreCollection.WORKUNIT, newWorkUnit.id), newWorkUnit)
     dispatch({ type: 'UPDATE_ITEM', newItem: newWorkUnit, itemType: 'workUnits' })
+    durationTimer.current = 0
   }
 
   // WorkUnitEdit block function
@@ -167,7 +168,7 @@ function TimeTracking() {
             )}
           </div>
 
-          <ul className='scrollbar mt-2 h-[28rem] space-y-1 overflow-y-auto'>
+          <ul className='scrollbar mt-2 h-[calc(100vh-theme(space.32))] space-y-1 overflow-y-auto'>
             {dateKeys.length > 0 && (
               <>
                 {dateKeys[0] === format(new Date(), DEFAULT.DATE_FORMAT) ? (
