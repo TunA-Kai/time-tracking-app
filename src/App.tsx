@@ -1,9 +1,9 @@
+import * as React from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from './components'
 import {
   About,
   Analytics,
-  Error,
   Pomodoro,
   Settings,
   Tags,
@@ -36,7 +36,7 @@ function App() {
           <Route path='pomodoro' element={<Pomodoro />} />
           <Route path='about' element={<About />} />
           <Route path='settings' element={<Settings />} />
-          <Route path='*' element={<Error />} />
+          <Route path='*' element={<Navigate to='/time_tracking' />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,8 +1,10 @@
+import React from 'react'
 import { Outlet } from 'react-router-dom'
 import { PageWrapper, SideBar } from '..'
 import { DataProvider } from '../../contexts/dataContext/dataContext'
 import { PomodoroProvider } from '../../contexts/pomodoroContext/pomodoroContext'
 import { WorkDetailsProvider } from '../../contexts/workDetailsContext/workDetailsContext'
+import { ReactComponent as Spinner } from '../../assets/spinner.svg'
 
 function AppLayout() {
   return (
@@ -11,15 +13,23 @@ function AppLayout() {
         <SideBar />
       </aside>
       <main className='h-full w-full grow bg-slate-900 p-4 pb-0'>
-        <PomodoroProvider>
-          <DataProvider>
-            <PageWrapper>
-              <WorkDetailsProvider>
-                <Outlet />
-              </WorkDetailsProvider>
-            </PageWrapper>
-          </DataProvider>
-        </PomodoroProvider>
+        <React.Suspense
+          fallback={
+            <div className='grid h-full w-full place-items-center'>
+              <Spinner />
+            </div>
+          }
+        >
+          <PomodoroProvider>
+            <DataProvider>
+              <PageWrapper>
+                <WorkDetailsProvider>
+                  <Outlet />
+                </WorkDetailsProvider>
+              </PageWrapper>
+            </DataProvider>
+          </PomodoroProvider>
+        </React.Suspense>
       </main>
     </div>
   )

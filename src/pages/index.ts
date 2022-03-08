@@ -1,7 +1,5 @@
+import * as React from 'react'
 import About from './about/About'
-import Analytics from './analytics/Analytics'
-import Error from './error/Error'
-import Pomodoro from './pomodoro/Pomodoro'
 import Settings from './settings/Settings'
 import Tags from './tags/Tags'
 import TagsHome from './tags/TagsHome'
@@ -11,17 +9,19 @@ import TasksHome from './tasks/TasksHome'
 import TasksNew from './tasks/TasksNew'
 import TimeTracking from './time_tracking/TimeTracking'
 
+const Analytics = React.lazy(() => import('./analytics/Analytics'))
+const Pomodoro = React.lazy(() => import('./pomodoro/Pomodoro'))
+
 export {
   About,
-  Analytics,
-  Pomodoro,
   Settings,
   Tags,
   Tasks,
   TimeTracking,
-  Error,
   TasksHome,
   TasksNew,
   TagsHome,
   TagsNew,
+  Analytics,
+  Pomodoro,
 }
