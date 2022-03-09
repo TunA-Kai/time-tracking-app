@@ -140,7 +140,7 @@ function TimeTracking() {
                     </Menu.Item>
                   ))}
                   <Menu.Item as='li'>
-                    <Link to={`/tasks/new`} className='button gap-2 px-1'>
+                    <Link to={`/tasks/new`} className='button w-full gap-2 px-1'>
                       <BsPlusCircle />
                       <span>Create new task</span>
                     </Link>
